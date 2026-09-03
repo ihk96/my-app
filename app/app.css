@@ -12,7 +12,7 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-background;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
@@ -36,6 +36,10 @@ body {
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning: var(--warning);
+  --color-success-muted: var(--success-muted);
+  --color-success: var(--success);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
@@ -62,73 +66,86 @@ body {
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ── Soft Pastel · light ───────────────────────────────────────────────
+   페리윙클 포인트 + 살짝 푸른 기운의 중성색. 카드는 순백으로 띄운다. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --background: oklch(0.977 0.007 277.2);        /* #F6F7FC */
+  --foreground: oklch(0.235 0.027 277.8);        /* #1B1D2B */
+  --card: oklch(1 0 0);                          /* #FFFFFF */
+  --card-foreground: oklch(0.235 0.027 277.8);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --popover-foreground: oklch(0.235 0.027 277.8);
+  --primary: oklch(0.579 0.204 272.1);           /* #5468F0 */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.949 0.023 278);           /* #EAEDFE */
+  --secondary-foreground: oklch(0.48 0.193 271.1);
+  --muted: oklch(0.953 0.014 277.1);             /* #EDEFF9 */
+  --muted-foreground: oklch(0.553 0.038 275.9);  /* #6C7189 */
+  --accent: oklch(0.949 0.023 278);
+  --accent-foreground: oklch(0.48 0.193 271.1);
+  --destructive: oklch(0.616 0.16 28.1);         /* #D4574B */
+  --success: oklch(0.567 0.105 168.4);           /* #1F8A6B */
+  --success-muted: oklch(0.954 0.019 171.5);     /* #E4F4EE */
+  --warning: oklch(0.623 0.127 78.5);            /* #B07C0C */
+  --warning-muted: oklch(0.963 0.027 85.7);      /* #FBF2DF */
+  --border: oklch(0.924 0.019 276.3);            /* #E2E5F3 */
+  --input: oklch(0.924 0.019 276.3);
+  --ring: oklch(0.579 0.204 272.1);
+  --chart-1: oklch(0.579 0.204 272.1);           /* 페리윙클 */
+  --chart-2: oklch(0.713 0.106 180.1);           /* 민트 */
+  --chart-3: oklch(0.771 0.128 60.3);            /* 살구 */
+  --chart-4: oklch(0.703 0.163 318.2);           /* 라일락 */
+  --chart-5: oklch(0.668 0.151 10.1);            /* 로즈 */
+  --radius: 0.625rem;                            /* 큰 면의 둥근 맛은 레이아웃에서 rounded-2xl/3xl로 올린다 */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.235 0.027 277.8);
+  --sidebar-primary: oklch(0.579 0.204 272.1);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.953 0.014 277.1);
+  --sidebar-accent-foreground: oklch(0.48 0.193 271.1);
+  --sidebar-border: oklch(0.924 0.019 276.3);
+  --sidebar-ring: oklch(0.579 0.204 272.1);
 }
 
+/* ── Soft Pastel · dark ────────────────────────────────────────────────
+   단순 반전이 아니라, 어두운 배경에서 탁해지지 않도록
+   포인트는 채도를 낮추고 밝기를 올린 별도 값(#93A0FF). */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.202 0.018 274.9);        /* #14161F */
+  --foreground: oklch(0.936 0.016 278.5);        /* #E7E9F5 */
+  --card: oklch(0.238 0.024 273.6);              /* #1B1E2A */
+  --card-foreground: oklch(0.936 0.016 278.5);
+  --popover: oklch(0.238 0.024 273.6);
+  --popover-foreground: oklch(0.936 0.016 278.5);
+  --primary: oklch(0.735 0.138 276.5);           /* #93A0FF */
+  --primary-foreground: oklch(0.223 0.04 270.2);
+  --secondary: oklch(0.288 0.03 273.5);
+  --secondary-foreground: oklch(0.936 0.016 278.5);
+  --muted: oklch(0.28 0.03 273.5);
+  --muted-foreground: oklch(0.696 0.037 274.7);  /* #969CB5 */
+  --accent: oklch(0.32 0.058 274.6);
+  --accent-foreground: oklch(0.852 0.074 278.8);
+  --destructive: oklch(0.74 0.127 28.2);         /* #F08A7D */
+  --success: oklch(0.779 0.127 170.3);           /* #4FD1AB */
+  --success-muted: oklch(0.286 0.034 177);       /* #16302A */
+  --warning: oklch(0.841 0.12 83.7);             /* #F0C46A */
+  --warning-muted: oklch(0.273 0.028 82.7);      /* #2E2617 */
+  --border: oklch(0.325 0.035 272.9);
+  --input: oklch(0.353 0.039 272.5);
+  --ring: oklch(0.735 0.138 276.5);
+  --chart-1: oklch(0.735 0.138 276.5);
+  --chart-2: oklch(0.795 0.109 181.1);
+  --chart-3: oklch(0.825 0.106 65.9);
+  --chart-4: oklch(0.786 0.124 316.7);
+  --chart-5: oklch(0.745 0.127 8.8);
+  --sidebar: oklch(0.238 0.024 273.6);
+  --sidebar-foreground: oklch(0.936 0.016 278.5);
+  --sidebar-primary: oklch(0.735 0.138 276.5);
+  --sidebar-primary-foreground: oklch(0.223 0.04 270.2);
+  --sidebar-accent: oklch(0.32 0.058 274.6);
+  --sidebar-accent-foreground: oklch(0.852 0.074 278.8);
+  --sidebar-border: oklch(0.325 0.035 272.9);
+  --sidebar-ring: oklch(0.735 0.138 276.5);
 }
 
 @layer base {
