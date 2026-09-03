@@ -1,1 +1,0 @@
-import{o as e,t}from"./jsx-runtime-P25wy219.js";import{t as n}from"./lib-Bg-wn7g6.js";var r=t();function i({}){return[{title:`New React Router App`},{name:`description`,content:`Welcome to React Router!`}]}var a=e(function(){return(0,r.jsx)(`div`,{children:(0,r.jsx)(n,{to:`/test`,viewTransition:!0,children:`Go to Test`})})});export{a as default,i as meta};

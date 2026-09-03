@@ -8,7 +8,6 @@ export default [
         route("inventory", "routes/app/inventory/index.tsx"),
         route("pets", "routes/app/pets/index.tsx")
     ]),
-    route("test","routes/test.tsx"),
     route("login","routes/login.tsx"),
 
 ] satisfies RouteConfig;

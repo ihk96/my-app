@@ -138,11 +138,11 @@ var ErrorBoundary = UNSAFE_withErrorBoundaryProps(function ErrorBoundary({ error
 //#region \0virtual:react-router/server-manifest
 var server_manifest_default = {
 	"entry": {
-		"module": "/assets/entry.client-BytTI4SQ.js",
+		"module": "/assets/entry.client-nH9RvQYF.js",
 		"imports": [
-			"/assets/jsx-runtime-P25wy219.js",
-			"/assets/react-dom-B8kgypuv.js",
-			"/assets/errorBoundaries-BQHOMYSg.js"
+			"/assets/utils-Duj3-NSY.js",
+			"/assets/jsx-runtime-DLqYqO7l.js",
+			"/assets/errorBoundaries-msimjkRu.js"
 		],
 		"css": []
 	},
@@ -160,12 +160,12 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-D5DQ5LSo.js",
+			"module": "/assets/root-C4256-mL.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/react-dom-B8kgypuv.js",
-				"/assets/errorBoundaries-BQHOMYSg.js",
-				"/assets/lib-Bg-wn7g6.js"
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/errorBoundaries-msimjkRu.js",
+				"/assets/lib-BzQYkn29.js"
 			],
 			"css": ["/assets/root-C5_VuHRa.css"],
 			"clientActionModule": void 0,
@@ -182,19 +182,20 @@ var server_manifest_default = {
 			"hasAction": false,
 			"hasLoader": false,
 			"hasClientAction": false,
-			"hasClientLoader": false,
+			"hasClientLoader": true,
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/home-CLFKjv2R.js",
+			"module": "/assets/home-main-Bm1tJCu9.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/lib-Bg-wn7g6.js",
-				"/assets/errorBoundaries-BQHOMYSg.js"
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/lib-BzQYkn29.js",
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/errorBoundaries-msimjkRu.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
-			"clientLoaderModule": void 0,
+			"clientLoaderModule": "/assets/home-client-loader-CYdogAg_.js",
 			"clientMiddlewareModule": void 0,
 			"hydrateFallbackModule": void 0
 		},
@@ -211,13 +212,13 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/app-DkwFG1Cq.js",
+			"module": "/assets/app-DXCAWdyC.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/lib-Bg-wn7g6.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/errorBoundaries-BQHOMYSg.js"
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/lib-BzQYkn29.js",
+				"/assets/utils-Bt7S2j2P.js",
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/errorBoundaries-msimjkRu.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -238,15 +239,13 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-BWp1ccdf.js",
+			"module": "/assets/index-BgvVmIEj.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/card-CL-E0ARP.js",
-				"/assets/badge-5Fd33T4e.js",
-				"/assets/dist-ClN_wlLO.js",
-				"/assets/useTimeout-CxM_sVoN.js"
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/utils-Bt7S2j2P.js",
+				"/assets/dist-C_2QWXd_.js",
+				"/assets/badge-BXLmPYtj.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -267,16 +266,15 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-L8nnQZ8D.js",
+			"module": "/assets/index-BzjWD7sZ.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/plus-BfcPr2rQ.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/card-CL-E0ARP.js",
-				"/assets/badge-5Fd33T4e.js",
-				"/assets/button-B2bad68B.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/dist-ClN_wlLO.js"
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/utils-Bt7S2j2P.js",
+				"/assets/plus-DhkzdGcy.js",
+				"/assets/dist-C_2QWXd_.js",
+				"/assets/badge-BXLmPYtj.js",
+				"/assets/button-L0yUfdIx.js",
+				"/assets/utils-Duj3-NSY.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -297,16 +295,15 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-IPS17_Gc.js",
+			"module": "/assets/index-EgT6lwL5.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/plus-BfcPr2rQ.js",
-				"/assets/card-CL-E0ARP.js",
-				"/assets/badge-5Fd33T4e.js",
-				"/assets/button-B2bad68B.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/dist-ClN_wlLO.js"
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/utils-Bt7S2j2P.js",
+				"/assets/plus-DhkzdGcy.js",
+				"/assets/dist-C_2QWXd_.js",
+				"/assets/badge-BXLmPYtj.js",
+				"/assets/button-L0yUfdIx.js",
+				"/assets/utils-Duj3-NSY.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -327,47 +324,15 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-BB9sPyx6.js",
+			"module": "/assets/index-C6r0yaSi.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/plus-BfcPr2rQ.js",
-				"/assets/card-CL-E0ARP.js",
-				"/assets/badge-5Fd33T4e.js",
-				"/assets/button-B2bad68B.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/dist-ClN_wlLO.js"
-			],
-			"css": [],
-			"clientActionModule": void 0,
-			"clientLoaderModule": void 0,
-			"clientMiddlewareModule": void 0,
-			"hydrateFallbackModule": void 0
-		},
-		"routes/test": {
-			"id": "routes/test",
-			"parentId": "root",
-			"path": "test",
-			"index": void 0,
-			"caseSensitive": void 0,
-			"hasAction": false,
-			"hasLoader": false,
-			"hasClientAction": false,
-			"hasClientLoader": false,
-			"hasClientMiddleware": false,
-			"hasDefaultExport": true,
-			"hasErrorBoundary": false,
-			"module": "/assets/test-YFutnQIH.js",
-			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/react-dom-B8kgypuv.js",
-				"/assets/lib-Bg-wn7g6.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/dist-ClN_wlLO.js",
-				"/assets/button-B2bad68B.js",
-				"/assets/useTimeout-CxM_sVoN.js",
-				"/assets/useControlled-F-NITvCk.js",
-				"/assets/errorBoundaries-BQHOMYSg.js"
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/plus-DhkzdGcy.js",
+				"/assets/dist-C_2QWXd_.js",
+				"/assets/badge-BXLmPYtj.js",
+				"/assets/button-L0yUfdIx.js",
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/utils-Bt7S2j2P.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -388,15 +353,13 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/login-CLM3pLS3.js",
+			"module": "/assets/login-BxZ6XIcz.js",
 			"imports": [
-				"/assets/jsx-runtime-P25wy219.js",
-				"/assets/createLucideIcon-qjQ5sAzr.js",
-				"/assets/utils-DojpP95n.js",
-				"/assets/card-CL-E0ARP.js",
-				"/assets/dist-ClN_wlLO.js",
-				"/assets/button-B2bad68B.js",
-				"/assets/useControlled-F-NITvCk.js"
+				"/assets/utils-Duj3-NSY.js",
+				"/assets/jsx-runtime-DLqYqO7l.js",
+				"/assets/utils-Bt7S2j2P.js",
+				"/assets/dist-C_2QWXd_.js",
+				"/assets/button-L0yUfdIx.js"
 			],
 			"css": [],
 			"clientActionModule": void 0,
@@ -405,8 +368,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-92896a9c.js",
-	"version": "92896a9c",
+	"url": "/assets/manifest-871c7bb3.js",
+	"version": "871c7bb3",
 	"sri": void 0
 };
 //#endregion
@@ -418,7 +381,6 @@ var route4 = { default: () => null };
 var route5 = { default: () => null };
 var route6 = { default: () => null };
 var route7 = { default: () => null };
-var route8 = { default: () => null };
 var assetsBuildDirectory = "build\\client";
 var basename = "/";
 var future = {
@@ -488,21 +450,13 @@ var routes = {
 		caseSensitive: void 0,
 		module: route6
 	},
-	"routes/test": {
-		id: "routes/test",
-		parentId: "root",
-		path: "test",
-		index: void 0,
-		caseSensitive: void 0,
-		module: route7
-	},
 	"routes/login": {
 		id: "routes/login",
 		parentId: "root",
 		path: "login",
 		index: void 0,
 		caseSensitive: void 0,
-		module: route8
+		module: route7
 	}
 };
 var allowedActionOrigins = false;
