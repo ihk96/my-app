@@ -9,51 +9,51 @@ import { cn } from "~/lib/utils";
 export default function Login() {
 
 
-    return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-            <div className="flex w-full max-w-sm flex-col gap-6">
-                <a href="#" className="flex items-center gap-2 self-center font-medium">
-                    <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                        <GalleryVerticalEnd className="size-4" />
-                    </div>
-                    Miyaku Org.
-                </a>
-                <LoginForm />
-            </div>
-        </div>
-    )
+	return (
+		<div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+			<div className="flex w-full max-w-sm flex-col gap-6">
+				<a href="#" className="flex items-center gap-2 self-center font-medium">
+					<div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+						<GalleryVerticalEnd className="size-4" />
+					</div>
+					Miyaku Org.
+				</a>
+				<LoginForm />
+			</div>
+		</div>
+	)
 }
 
 
 
 export function LoginForm({
-    className,
-    ...props
+	className,
+	...props
 }: React.ComponentProps<"div">) {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    function handleActionLogin() {
-        navigate("/");
-    }
+	function handleActionLogin() {
+		navigate("/");
+	}
 
 
-    return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card>
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
-                    {/* <CardDescription>
+	return (
+		<div className={cn("flex flex-col gap-6", className)} {...props}>
+			<Card>
+				<CardHeader className="text-center">
+					<CardTitle className="text-xl">Welcome back</CardTitle>
+					{/* <CardDescription>
             Login with your Apple or Google account
           </CardDescription> */}
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        handleActionLogin();
-                    }}>
-                        <FieldGroup>
+				</CardHeader>
+				<CardContent>
+					<form onSubmit={(e) => {
+						e.preventDefault();
+						handleActionLogin();
+					}}>
+						<FieldGroup>
 
-                            {/* <Field>
+							{/* <Field>
                 <Button variant="outline" type="button">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
@@ -77,41 +77,41 @@ export function LoginForm({
                 Or continue with
               </FieldSeparator> */}
 
-                            <Field>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <div className="flex items-center">
-                                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                                    {/* <a
+							<Field>
+								<FieldLabel htmlFor="email">Email</FieldLabel>
+								<Input
+									id="email"
+									type="email"
+									placeholder="m@example.com"
+									required
+								/>
+							</Field>
+							<Field>
+								<div className="flex items-center">
+									<FieldLabel htmlFor="password">Password</FieldLabel>
+									{/* <a
                     href="#"
                     className="ml-auto text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
                   </a> */}
-                                </div>
-                                <Input id="password" type="password" required />
-                            </Field>
-                            <Field>
-                                <Button type="submit">Login</Button>
-                                <FieldDescription className="text-center">
-                                    {/* Don&apos;t have an account? <a href="#">Sign up</a> */}
-                                </FieldDescription>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </CardContent>
-            </Card>
-            {/* <FieldDescription className="px-6 text-center">
+								</div>
+								<Input id="password" type="password" required />
+							</Field>
+							<Field>
+								<Button type="submit">Login</Button>
+								<FieldDescription className="text-center">
+									{/* Don&apos;t have an account? <a href="#">Sign up</a> */}
+								</FieldDescription>
+							</Field>
+						</FieldGroup>
+					</form>
+				</CardContent>
+			</Card>
+			{/* <FieldDescription className="px-6 text-center">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </FieldDescription> */}
-        </div>
-    )
+		</div>
+	)
 }
