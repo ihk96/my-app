@@ -69,21 +69,14 @@ var root_exports = /* @__PURE__ */ __exportAll({
 	default: () => root_default,
 	links: () => links
 });
-var links = () => [
-	{
-		rel: "preconnect",
-		href: "https://fonts.googleapis.com"
-	},
-	{
-		rel: "preconnect",
-		href: "https://fonts.gstatic.com",
-		crossOrigin: "anonymous"
-	},
-	{
-		rel: "stylesheet",
-		href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-	}
-];
+var links = () => [{
+	rel: "manifest",
+	href: "/manifest.webmanifest"
+}, {
+	rel: "icon",
+	href: "/favicon.svg",
+	type: "image/svg+xml"
+}];
 function Layout({ children }) {
 	return /* @__PURE__ */ jsxs("html", {
 		lang: "en",
@@ -160,14 +153,14 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-C4256-mL.js",
+			"module": "/assets/root-4Ey48fTj.js",
 			"imports": [
 				"/assets/utils-Duj3-NSY.js",
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/errorBoundaries-msimjkRu.js",
 				"/assets/lib-BzQYkn29.js"
 			],
-			"css": ["/assets/root-C5_VuHRa.css"],
+			"css": ["/assets/root-DUp27Lsq.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -368,8 +361,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-871c7bb3.js",
-	"version": "871c7bb3",
+	"url": "/assets/manifest-f4618b5c.js",
+	"version": "f4618b5c",
 	"sri": void 0
 };
 //#endregion
