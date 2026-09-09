@@ -70,9 +70,6 @@ var root_exports = /* @__PURE__ */ __exportAll({
 	links: () => links
 });
 var links = () => [{
-	rel: "manifest",
-	href: "/manifest.webmanifest"
-}, {
 	rel: "icon",
 	href: "/favicon.svg",
 	type: "image/svg+xml"
@@ -154,14 +151,14 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-ClzZmPQN.js",
+			"module": "/assets/root-QCCPEZxU.js",
 			"imports": [
 				"/assets/utils-Duj3-NSY.js",
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/errorBoundaries-msimjkRu.js",
 				"/assets/lib-BzQYkn29.js"
 			],
-			"css": ["/assets/root-DMIR4yL9.css"],
+			"css": ["/assets/root-BstIHCme.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -362,8 +359,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-a0daadb4.js",
-	"version": "a0daadb4",
+	"url": "/assets/manifest-e844028f.js",
+	"version": "e844028f",
 	"sri": void 0
 };
 //#endregion

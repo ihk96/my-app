@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>safe area 디버그</title>
+    <style>
+      /* 보라색은 "뷰포트 바깥"을 뜻한다. iOS는 뷰포트 밖 영역을 body 배경색으로 칠하므로,
+         화면 어딘가에 보라색이 보이면 그 부분은 페이지가 닿을 수 없는 영역이다. */
+      html,
+      body {
+        margin: 0;
+        background: #7c3aed;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      /* 페이지가 그릴 수 있는 최대 영역 */
+      #frame {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        color: #111;
+      }
+
+      /* 위/아래 safe-area inset 만큼의 띠 */
+      #topbar {
+        height: env(safe-area-inset-top);
+        background: #fb923c;
+        flex: none;
+      }
+      #botbar {
+        height: env(safe-area-inset-bottom);
+        background: #22c55e;
+        flex: none;
+      }
+
+      /* 뷰포트의 진짜 바닥. 이 빨간 줄이 화면 끝에 닿는지가 핵심. */
+      #edge {
+        height: 10px;
+        background: #dc2626;
+        flex: none;
+      }
+
+      #content {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 12px 14px;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      h1 {
+        font-size: 15px;
+        margin: 0 0 10px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td {
+        padding: 3px 0;
+        vertical-align: top;
+      }
+      td:first-child {
+        color: #666;
+        white-space: nowrap;
+        padding-right: 10px;
+      }
+      td:last-child {
+        text-align: right;
+        font-weight: 600;
+      }
+      .sec {
+        margin-top: 14px;
+        padding-top: 10px;
+        border-top: 1px solid #e5e5e5;
+      }
+      .hint {
+        margin-top: 14px;
+        padding: 10px;
+        border-radius: 8px;
+        background: #f5f5f5;
+        color: #444;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      button {
+        font: inherit;
+        padding: 8px 14px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fff;
+      }
+      /* 측정용 프로브 (보이지 않음) */
+      .probe {
+        position: absolute;
+        top: 0;
+        left: -9999px;
+        width: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="frame">
+      <div id="topbar"></div>
+      <div id="content">
+        <h1>safe area 디버그</h1>
+        <table id="out"></table>
+        <div class="hint">
+          <b>보는 법</b><br />
+          · 주황 = 위쪽 safe-area inset<br />
+          · 초록 = 아래쪽 safe-area inset<br />
+          · <b>빨강 = 뷰포트의 진짜 바닥</b><br /><br />
+          빨간 줄이 화면 맨 아래에 <b>닿으면</b> 페이지가 화면 끝까지 쓸 수 있다는 뜻.<br />
+          빨간 줄 아래로 <b>보라색이 보이면</b> 그 영역은 뷰포트 바깥이라 CSS로 못 채운다.
+        </div>
+        <button onclick="measure()">다시 측정</button>
+      </div>
+      <div id="botbar"></div>
+      <div id="edge"></div>
+    </div>
+
+    <div class="probe" id="p-dvh" style="height: 100dvh"></div>
+    <div class="probe" id="p-svh" style="height: 100svh"></div>
+    <div class="probe" id="p-lvh" style="height: 100lvh"></div>
+    <div class="probe" id="p-vh" style="height: 100vh"></div>
+    <div class="probe" id="p-sat" style="height: env(safe-area-inset-top)"></div>
+    <div class="probe" id="p-sab" style="height: env(safe-area-inset-bottom)"></div>
+    <div class="probe" id="p-sal" style="height: env(safe-area-inset-left)"></div>
+    <div class="probe" id="p-sar" style="height: env(safe-area-inset-right)"></div>
+
+    <script>
+      const px = (id) => document.getElementById(id).getBoundingClientRect().height.toFixed(1) + "px";
+
+      function displayMode() {
+        for (const m of ["standalone", "fullscreen", "minimal-ui", "browser"]) {
+          if (matchMedia(`(display-mode: ${m})`).matches) return m;
+        }
+        return "?";
+      }
+
+      function measure() {
+        const edge = document.getElementById("edge").getBoundingClientRect();
+        const rows = [
+          ["display-mode", displayMode()],
+          ["navigator.standalone", String(navigator.standalone)],
+          ["--- 화면/뷰포트 ---", ""],
+          ["window.innerHeight", window.innerHeight],
+          ["screen.height", screen.height],
+          ["visualViewport.height", visualViewport ? visualViewport.height.toFixed(1) : "-"],
+          ["documentElement.clientHeight", document.documentElement.clientHeight],
+          ["devicePixelRatio", devicePixelRatio],
+          ["--- safe-area inset ---", ""],
+          ["top", px("p-sat")],
+          ["bottom", px("p-sab")],
+          ["left / right", px("p-sal") + " / " + px("p-sar")],
+          ["--- 높이 단위 ---", ""],
+          ["100dvh", px("p-dvh")],
+          ["100svh", px("p-svh")],
+          ["100lvh", px("p-lvh")],
+          ["100vh", px("p-vh")],
+          ["--- 빨간 줄 위치 ---", ""],
+          ["edge.bottom", edge.bottom.toFixed(1)],
+          ["innerHeight - edge.bottom", (window.innerHeight - edge.bottom).toFixed(1)],
+        ];
+
+        document.getElementById("out").innerHTML = rows
+          .map(([k, v]) =>
+            v === ""
+              ? `<tr><td colspan="2" style="color:#999;padding-top:8px">${k}</td></tr>`
+              : `<tr><td>${k}</td><td>${v}</td></tr>`
+          )
+          .join("");
+      }
+
+      measure();
+      addEventListener("resize", measure);
+      addEventListener("orientationchange", () => setTimeout(measure, 300));
+      if (window.visualViewport) visualViewport.addEventListener("resize", measure);
+    </script>
+  </body>
+</html>

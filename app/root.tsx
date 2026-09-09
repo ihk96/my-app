@@ -11,7 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
-  { rel: "manifest", href: "/manifest.webmanifest" },
+  // { rel: "manifest", href: "/manifest.webmanifest" },
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 ];
 
