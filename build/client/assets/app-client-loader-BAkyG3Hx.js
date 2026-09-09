@@ -1,0 +1,1 @@
+import{t as e}from"./users-DAAOtI4q.js";async function t(){return{user:await e.me().then(e=>e.data)}}export{t as clientLoader};

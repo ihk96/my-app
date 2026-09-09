@@ -1,1 +1,0 @@
-import{E as e}from"./utils-Duj3-NSY.js";async function t(){return e(`/app`)}export{t as clientLoader};

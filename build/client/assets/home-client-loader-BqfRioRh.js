@@ -1,0 +1,1 @@
+import{O as e}from"./utils-D8DF_fE-.js";async function t(){return e(`/app`)}export{t as clientLoader};

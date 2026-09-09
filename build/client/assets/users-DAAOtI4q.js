@@ -1,0 +1,1 @@
+import{t as e}from"./api-client-H6AkTUcl.js";import{n as t,r as n,t as r}from"./schemas-gP0zsXjp.js";var i={me:async function(){return await e.get(`/users/me`)}};t({id:n(),login_id:n(),name:n(),created_at:r(),last_login_at:r()});export{i as t};
