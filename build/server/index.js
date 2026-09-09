@@ -70,6 +70,9 @@ var root_exports = /* @__PURE__ */ __exportAll({
 	links: () => links
 });
 var links = () => [{
+	rel: "manifest",
+	href: "/manifest.webmanifest"
+}, {
 	rel: "icon",
 	href: "/favicon.svg",
 	type: "image/svg+xml"
@@ -94,7 +97,7 @@ function Layout({ children }) {
 			}),
 			/* @__PURE__ */ jsx("meta", {
 				name: "apple-mobile-web-app-status-bar-style",
-				content: "black-translucent"
+				content: "default"
 			}),
 			/* @__PURE__ */ jsx(Meta, {}),
 			/* @__PURE__ */ jsx(Links, {})
@@ -151,7 +154,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-B7PEdQV7.js",
+			"module": "/assets/root-Dxfvtmzq.js",
 			"imports": [
 				"/assets/utils-Duj3-NSY.js",
 				"/assets/jsx-runtime-DLqYqO7l.js",
@@ -359,8 +362,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-d403f6cb.js",
-	"version": "d403f6cb",
+	"url": "/assets/manifest-f1125bd1.js",
+	"version": "f1125bd1",
 	"sri": void 0
 };
 //#endregion

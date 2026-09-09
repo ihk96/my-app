@@ -11,7 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
-  // { rel: "manifest", href: "/manifest.webmanifest" },
+  { rel: "manifest", href: "/manifest.webmanifest" },
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 ];
 
@@ -27,7 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <meta name="theme-color" content="#111111" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <Meta />
         <Links />
       </head>
