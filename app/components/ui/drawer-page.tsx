@@ -1,15 +1,30 @@
 import { cn } from "~/lib/utils";
-import { DrawerContent } from "./drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "./drawer";
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
-export function DrawerPageContent({
+
+
+export function DrawerPage({
   className,
   children,
+  trigger,
   ...props
-}: DrawerPrimitive.Popup.Props) {
+}: {
+  trigger: React.ReactNode;
+  title: React.ReactNode;
+  description: React.ReactNode;
+} &DrawerPrimitive.Popup.Props) {
     return (
+      <Drawer swipeDirection="right">
+        <DrawerTrigger>{trigger}</DrawerTrigger>
         <DrawerContent className={cn("w-screen! rounded-none!", className)} {...props}>
-            {children}
+          <DrawerHeader>
+            <DrawerTitle>{props.title}</DrawerTitle>
+            <DrawerDescription>{props.description}</DrawerDescription>
+          </DrawerHeader>
+          {children}
         </DrawerContent>
+      </Drawer>
+        
     );
 }

@@ -6,7 +6,8 @@ export default [
 		index("routes/app/index.tsx"),
 		route("balance", "routes/app/balance/index.tsx"),
 		route("inventory", "routes/app/inventory/index.tsx"),
-		route("pets", "routes/app/pets/index.tsx")
+		route("pets", "routes/app/pets/index.tsx"),
+		route("pets-concept", "routes/app/pets/index-concept.tsx"),
 	]),
 	route("login", "routes/login.tsx"),
 
