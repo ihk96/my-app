@@ -5,7 +5,7 @@ import { cn } from "~/lib/utils";
 
 export default function App() {
 	return (
-		<div className="flex h-dvh w-full flex-col bg-background text-foreground">
+		<div className="flex fixed inset-0 w-full flex-col bg-background text-foreground">
 			<main className="min-h-0 flex-1 overflow-y-auto pt-[env(safe-area-inset-top)]">
 				<Outlet />
 			</main>

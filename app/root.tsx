@@ -19,6 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <title>Miyaku</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
