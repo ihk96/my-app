@@ -1,10 +1,14 @@
-import { GalleryVerticalEnd } from "lucide-react";
+import type { AxiosError } from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "~/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
+import { toast } from "~/components/ui/toast";
 import { cn } from "~/lib/utils";
+import login from "~/services/login";
 
 export default function Login() {
 
@@ -14,7 +18,7 @@ export default function Login() {
 			<div className="flex w-full max-w-sm flex-col gap-6">
 				<a href="#" className="flex items-center gap-2 self-center font-medium">
 					<div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-						<GalleryVerticalEnd className="size-4" />
+						<img src="/icons/192.png"/>
 					</div>
 					Miyaku Org.
 				</a>
@@ -31,9 +35,41 @@ export function LoginForm({
 	...props
 }: React.ComponentProps<"div">) {
 	const navigate = useNavigate();
+  const [loginId, setLoginId] = useState("");
+  const [loginIdError, setLoginIdError] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginPending, setLoginPending] = useState(false);
 
 	function handleActionLogin() {
-		navigate("/");
+    setLoginPending(true);
+    setLoginIdError("");
+    setPasswordError("");
+    setLoginError("");
+
+    if(!loginId){
+      setLoginIdError("Email을 입력해주세요.");
+    }
+    if(!password){
+      setPasswordError("Password를 입력해주세요.");
+    }
+
+    if(loginId && password){
+      login.login(loginId, password).then(()=>{
+        navigate("/");
+      }).catch((e: AxiosError)=>{
+        if(e.status == 401) {
+          setLoginError("입력하신 정보가 일치하지 않습니다.");
+        } else {
+          setLoginError("로그인 과정에서 문제가 발생했습니다.");
+        }
+      }).finally(()=>{
+        setLoginPending(false);
+      });
+    } else {
+      setLoginPending(false);
+    }
 	}
 
 
@@ -41,16 +77,16 @@ export function LoginForm({
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card>
 				<CardHeader className="text-center">
-					<CardTitle className="text-xl">Welcome back</CardTitle>
+					<CardTitle className="text-xl">Welcome</CardTitle>
 					{/* <CardDescription>
             Login with your Apple or Google account
           </CardDescription> */}
 				</CardHeader>
 				<CardContent>
-					<form onSubmit={(e) => {
+					{/* <form onSubmit={(e) => {
 						e.preventDefault();
 						handleActionLogin();
-					}}>
+					}}> */}
 						<FieldGroup>
 
 							{/* <Field>
@@ -83,8 +119,13 @@ export function LoginForm({
 									id="email"
 									type="email"
 									placeholder="m@example.com"
+                  disabled={loginPending}
 									required
+                  value={loginId}
+                  aria-invalid={loginIdError != ""}
+                  onChange={(e)=>{setLoginId(e.currentTarget.value)}}
 								/>
+                <FieldError>{loginIdError}</FieldError>
 							</Field>
 							<Field>
 								<div className="flex items-center">
@@ -96,16 +137,33 @@ export function LoginForm({
                     Forgot your password?
                   </a> */}
 								</div>
-								<Input id="password" type="password" required />
+								<Input 
+                  id="password" 
+                  type="password" 
+                  disabled={loginPending}
+                  required 
+                  value={password}
+                  aria-invalid={passwordError != ""}
+                  onChange={(e)=>{setPassword(e.currentTarget.value)}}
+                />
+                <FieldError>{passwordError}</FieldError>
+                <FieldError>{loginError}</FieldError>
 							</Field>
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button 
+                  type="button" 
+                  disabled={loginPending}
+                  onClick={handleActionLogin}
+                >
+                  {loginPending && <Spinner />}
+                  LOG IN
+                </Button>
 								<FieldDescription className="text-center">
 									{/* Don&apos;t have an account? <a href="#">Sign up</a> */}
 								</FieldDescription>
 							</Field>
 						</FieldGroup>
-					</form>
+					{/* </form> */}
 				</CardContent>
 			</Card>
 			{/* <FieldDescription className="px-6 text-center">

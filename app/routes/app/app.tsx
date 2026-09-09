@@ -1,16 +1,53 @@
+import type { AxiosError } from "axios";
 import { HomeIcon, Package, PawPrint, Wallet } from "lucide-react";
-import { NavLink, Outlet } from "react-router";
+import { NavLink, Outlet, replace, useLoaderData } from "react-router";
 
 import { cn } from "~/lib/utils";
+import users from "~/services/users";
+import type { Route } from "./+types";
+import { useContext, useEffect } from "react";
+import { useAppState } from "~/stores/app-state";
+import { Spinner } from "~/components/ui/spinner";
 
-export default function App() {
+export async function clientLoader() {
+  const user = await users.me()
+    .then(res=>res.data);
+  return {
+    user
+  }
+}
+
+
+export default function App({loaderData}:Route.ComponentProps) {
+  const {user} = loaderData;
+  const {user : app_user, setUser} = useAppState();
+
+  useEffect(()=>{
+    if(user){
+      setUser(user);
+    }
+  },[user])
+  
 	return (
-		<div className="flex h-dvh w-full flex-col bg-background text-foreground">
-			<main className="min-h-0 flex-1 overflow-y-auto pt-[env(safe-area-inset-top)]">
-				<Outlet />
-			</main>
-			<AppFooter />
-		</div>
+      <div className="flex h-dvh w-full flex-col bg-background text-foreground">
+        {app_user ? 
+          (
+            <>
+              <main className="min-h-0 flex-1 overflow-y-auto pt-[env(safe-area-inset-top)]">
+                <Outlet />
+              </main>
+              <AppFooter />
+            </>
+          )
+          :
+          (
+            <div>
+              <Spinner />
+            </div>
+          )
+        }
+        
+      </div>
 	);
 }
 
@@ -45,3 +82,6 @@ function AppFooter() {
 		</nav>
 	);
 }
+
+
+

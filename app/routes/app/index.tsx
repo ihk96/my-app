@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { CardContent } from "~/components/ui/card";
+import { useAppState } from "~/stores/app-state";
 
 const BUDGET = { spent: 1_284_300, total: 1_600_000, daysLeft: 27 };
 
@@ -48,15 +49,16 @@ const won = (n: number) => `₩${n.toLocaleString("ko-KR")}`;
 export default function AppHome() {
 	const remaining = BUDGET.total - BUDGET.spent;
 	const usedPercent = Math.round((BUDGET.spent / BUDGET.total) * 100);
+  const {user} = useAppState();
 
 	return (
 		<Screen>
 			<ScreenHeader
-				title="오늘의 살림"
+				title={`안녕하세요, ${user.name}님`}
 				subtitle="9월 3일 목요일 · 처리할 일 3"
 				action={
 					<Avatar className="size-9">
-						<AvatarFallback className="text-[11px]">IHK</AvatarFallback>
+						<AvatarFallback className="text-[11px]">{user?.name.charAt(0)}</AvatarFallback>
 					</Avatar>
 				}
 			/>
