@@ -5,7 +5,7 @@ import { cn } from "~/lib/utils";
 
 export default function App() {
 	return (
-		<div className="flex fixed inset-0 w-full flex-col bg-background text-foreground">
+		<div className="flex h-dvh w-full flex-col bg-background text-foreground">
 			<main className="min-h-0 flex-1 overflow-y-auto pt-[env(safe-area-inset-top)]">
 				<Outlet />
 			</main>
@@ -23,7 +23,7 @@ const TABS = [
 
 function AppFooter() {
 	return (
-		<nav className="flex shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-2">
+		<nav className="flex shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),0.5rem)]">
 			{TABS.map((tab) => (
 				<NavLink
 					key={tab.to}

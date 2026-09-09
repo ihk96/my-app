@@ -154,14 +154,14 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-pV-No8Pe.js",
+			"module": "/assets/root-ClzZmPQN.js",
 			"imports": [
 				"/assets/utils-Duj3-NSY.js",
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/errorBoundaries-msimjkRu.js",
 				"/assets/lib-BzQYkn29.js"
 			],
-			"css": ["/assets/root--y0ss5vk.css"],
+			"css": ["/assets/root-DMIR4yL9.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -206,7 +206,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/app-Ca7vb-sY.js",
+			"module": "/assets/app-DXCAWdyC.js",
 			"imports": [
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/lib-BzQYkn29.js",
@@ -362,8 +362,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-206b5f96.js",
-	"version": "206b5f96",
+	"url": "/assets/manifest-a0daadb4.js",
+	"version": "a0daadb4",
 	"sri": void 0
 };
 //#endregion
