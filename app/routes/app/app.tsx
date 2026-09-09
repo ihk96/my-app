@@ -23,7 +23,7 @@ const TABS = [
 
 function AppFooter() {
 	return (
-		<nav className="flex shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),0.5rem)]">
+		<nav className="flex shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-2">
 			{TABS.map((tab) => (
 				<NavLink
 					key={tab.to}
