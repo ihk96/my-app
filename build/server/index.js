@@ -154,14 +154,14 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-DDAuTHJQ.js",
+			"module": "/assets/root-BXDbxp8R.js",
 			"imports": [
 				"/assets/utils-Duj3-NSY.js",
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/errorBoundaries-msimjkRu.js",
 				"/assets/lib-BzQYkn29.js"
 			],
-			"css": ["/assets/root-Dbljpz55.css"],
+			"css": ["/assets/root-COXHlaHx.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -206,7 +206,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/app-DzIxrGR1.js",
+			"module": "/assets/app-Ca7vb-sY.js",
 			"imports": [
 				"/assets/jsx-runtime-DLqYqO7l.js",
 				"/assets/lib-BzQYkn29.js",
@@ -362,8 +362,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-376fe193.js",
-	"version": "376fe193",
+	"url": "/assets/manifest-076ad266.js",
+	"version": "076ad266",
 	"sri": void 0
 };
 //#endregion
