@@ -117,10 +117,11 @@ export default function PetsHome() {
                             <Field>
                               <FieldLabel>날짜<span className="text-destructive">*</span></FieldLabel>
                               <div className="flex gap-2">
-                                <Popover>
+                                {/* <Popover>
                                   <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-53 justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "yyyy-MM-dd") : <span>Pick a date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
                                   <PopoverContent className="w-auto p-0" align="start">
                                     <Calendar
+                                      className="w-full"
                                       required
                                       mode="single"
                                       selected={date}
@@ -128,13 +129,21 @@ export default function PetsHome() {
                                       defaultMonth={date}
                                     />
                                   </PopoverContent>
-                                </Popover>
+                                </Popover> */}
+                                <Input
+                                  required
+                                  type="date"
+                                  id="date-picker-optional"
+                                  step="1"
+                                  defaultValue={new Date().toISOString().split("T")[0]}
+                                  className="text-sm appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
                                 <Input
                                   required
                                   type="time"
                                   id="time-picker-optional"
                                   step="1"
-                                  defaultValue="10:30:00"
+                                  defaultValue={new Date().toISOString().split("T")[1].slice(0, 8)}
                                   className="text-sm appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                 />
                               </div>
