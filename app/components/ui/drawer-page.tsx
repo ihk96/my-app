@@ -4,6 +4,7 @@ import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { Button } from "./button";
 import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import { ScrollArea } from "./scroll-area";
 
 
 
@@ -41,8 +42,10 @@ export function DrawerPage({
           </DrawerTitle>
           <DrawerDescription>{props.description}</DrawerDescription>
         </DrawerHeader>
-        <div className="p-4">
-          {children}
+        <div className="px-4 pt-4 flex-1 min-h-0 overflow-auto">
+          <div className="pb-4">
+            {children}
+          </div>
         </div>
       </DrawerContent>
     </Drawer>

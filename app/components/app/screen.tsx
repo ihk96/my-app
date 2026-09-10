@@ -91,14 +91,15 @@ function Row({
   title,
   description,
   trailing,
+  ...props
 }: {
   media?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
   trailing?: React.ReactNode;
-}) {
+} & React.ComponentProps<"div">) {
   return (
-    <div className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
+    <div className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0" {...props}>
       {media ? (
         <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-base text-muted-foreground">
           {media}

@@ -4,6 +4,10 @@ import { Input } from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { cn } from "~/lib/utils";
+import { Badge } from "~/components/ui/badge";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+
+const PETS = ["도봉이", "꼬미","도봉일","도봉삼","도봉사","도봉오","도봉육"];
 
 export type RecurrenceUnit = "day" | "week" | "month";
 
@@ -196,6 +200,24 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
           placeholder="예) 산책, 발톱 깎기"
         />
       </Field>
+      <Field>
+        <FieldLabel>대상 반려동물</FieldLabel>
+          <ScrollArea className={"flex-1 min-w-0"}>
+            <div className="flex gap-2">
+              <ToggleGroup variant={"outline"} multiple>
+                {PETS.map((pet) => (
+                  <ToggleGroupItem
+                    key={pet}
+                    value={pet}
+                  >
+                    {pet}
+                  </ToggleGroupItem>
+                ))}
+            </ToggleGroup>
+            </div>
+            <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
+          </ScrollArea>
+      </Field>
 
       <Field>
         <FieldLabel>유형</FieldLabel>
@@ -224,6 +246,7 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
                 id="care-item-interval"
                 type="number"
                 min={1}
+                inputMode="numeric"
                 max={maxInterval[unit]}
                 disabled={intervalLocked}
                 value={interval}

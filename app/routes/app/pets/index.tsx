@@ -1,77 +1,86 @@
-import { Plus } from "lucide-react";
+import { format } from "date-fns";
+import { ChevronDownIcon, Plus } from "lucide-react";
+import { useState } from "react";
+import Fi from "zod/v4/locales/fi.cjs";
 
 import {
-	Meter,
-	Row,
-	RowGroup,
-	Screen,
-	ScreenHeader,
-	Panel,
-	SectionTitle,
-	StatTile,
+  Meter,
+  Row,
+  RowGroup,
+  Screen,
+  ScreenHeader,
+  Panel,
+  SectionTitle,
+  StatTile,
 } from "~/components/app/screen";
 import CareSidePage from "~/components/app/sides/care-side";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import { CardContent } from "~/components/ui/card";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "~/components/ui/drawer";
 import { DrawerPage } from "~/components/ui/drawer-page";
+import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Textarea } from "~/components/ui/textarea";
 
-const PETS = ["도봉이", "꼬미","도봉","도봉","도봉","도봉","도봉"];
+const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉"];
 
 const WEIGHT_SERIES = [48.3, 49.1, 50.0, 50.6, 51.7, 52.4];
 
 const CARE_LOG = [
-	{
-		media: "🦗",
-		title: "급여",
-		description: "오늘 예정 · 격일",
-		badge: { label: "대기", className: "bg-warning-muted text-warning" },
-	},
-	{
-		media: "💧",
-		title: "분무",
-		description: "수시  · [마지막] 오늘 07:20",
-		badge: { label: "기록", className: "bg-success-muted text-success" },
-	},
-	{
-		media: "🍂",
-		title: "탈피",
-		description: "수시 · [마지막] 25.09.01",
-		badge: { label: "기록", className: "bg-muted text-muted-foreground" },
-	},
-	{
-		media: "🧹​",
-		title: "청소",
-		description: "수시 · [마지막] 어제 20:37",
-		badge: { label: "기록", className: "bg-muted text-muted-foreground" },
-	},
+  {
+    media: "🦗",
+    title: "급여",
+    description: "오늘 예정 · 격일",
+    badge: { label: "대기", className: "bg-warning-muted text-warning" },
+  },
+  {
+    media: "💧",
+    title: "분무",
+    description: "수시  · [마지막] 오늘 07:20",
+    badge: { label: "기록", className: "bg-success-muted text-success" },
+  },
+  {
+    media: "🍂",
+    title: "탈피",
+    description: "수시 · [마지막] 25.09.01",
+    badge: { label: "기록", className: "bg-muted text-muted-foreground" },
+  },
+  {
+    media: "🧹​",
+    title: "청소",
+    description: "수시 · [마지막] 어제 20:37",
+    badge: { label: "기록", className: "bg-muted text-muted-foreground" },
+  },
 ];
 
 export default function PetsHome() {
-	return (
-		<Screen>
-			<ScreenHeader
-				title="반려동물"
-				// subtitle="2마리 · 오늘 할 일 2"
-				// action={
-				// 	<Button size="icon-sm" variant="secondary" aria-label="반려동물 추가">
-				// 		<Plus />
-				// 	</Button>
-				// }
-			/>
+  return (
+    <Screen>
+      <ScreenHeader
+        title="반려동물"
+      // subtitle="2마리 · 오늘 할 일 2"
+      // action={
+      // 	<Button size="icon-sm" variant="secondary" aria-label="반려동물 추가">
+      // 		<Plus />
+      // 	</Button>
+      // }
+      />
 
       <div className="flex flex-col gap-1">
-        <SectionTitle 
+        <SectionTitle
           aside={
             <DrawerPage
               trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
               title="돌봄 기록"
-              // description="전체 돌봄 기록을 확인하세요"
+            // description="전체 돌봄 기록을 확인하세요"
             >
-              <CareSidePage/>
+              <CareSidePage />
             </DrawerPage>
-            
+
           }
         >
           돌봄 기록
@@ -79,24 +88,77 @@ export default function PetsHome() {
         <Panel>
           <CardContent className="flex flex-col gap-3">
             <RowGroup>
-              {CARE_LOG.map((entry) => (
-                <Row
-                  key={entry.title}
-                  media={entry.media}
-                  title={entry.title}
-                  description={entry.description}
-                  trailing={
-                    <Badge className={entry.badge.className}>
-                      {entry.badge.label}
-                    </Badge>
-                  }
-                />
-              ))}
+              {CARE_LOG.map((entry) => {
+                const [open, setOpen] = useState(false);
+                const [date, setDate] = useState<Date>(new Date())
+
+                return (
+                  <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
+                    <Row
+                      onClick={() => setOpen(true)}
+                      key={entry.title}
+                      media={entry.media}
+                      title={entry.title}
+                      description={entry.description}
+                      trailing={
+                        <Badge className={entry.badge.className}>
+                          {entry.badge.label}
+                        </Badge>
+                      }
+                    />
+                    <DrawerContent>
+                      <DrawerHeader>
+                        <DrawerTitle>돌봄 기록 · {entry.title}</DrawerTitle>
+                        <DrawerDescription>{entry.description}</DrawerDescription>
+                      </DrawerHeader>
+                      <div className="p-4 flex-col flex gap-4">
+                        <div>
+                          <FieldGroup>
+                            <Field>
+                              <FieldLabel>날짜<span className="text-destructive">*</span></FieldLabel>
+                              <div className="flex gap-2">
+                                <Popover>
+                                  <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-53 justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "yyyy-MM-dd") : <span>Pick a date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
+                                  <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                      required
+                                      mode="single"
+                                      selected={date}
+                                      onSelect={setDate}
+                                      defaultMonth={date}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                                <Input
+                                  required
+                                  type="time"
+                                  id="time-picker-optional"
+                                  step="1"
+                                  defaultValue="10:30:00"
+                                  className="text-sm appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
+                              </div>
+                            </Field>
+                            <Field>
+                              <FieldLabel>기록</FieldLabel>
+                              <Textarea placeholder="돌봄 기록을 입력하세요" />
+                            </Field>
+                          </FieldGroup>
+                        </div>
+                        <p>
+                          돌봄 기록을 남기시겠습니까?
+                        </p>
+                        <Button>기록 남기기</Button>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                )
+              })}
             </RowGroup>
           </CardContent>
         </Panel>
       </div>
-      
+
       <div className="flex justify-between gap-2">
         <ScrollArea className={"flex-1 min-w-0"}>
           <div className="flex gap-2">
@@ -113,79 +175,79 @@ export default function PetsHome() {
           <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
         </ScrollArea>
         <Button className={"shrink-0"} size="icon-sm" variant="secondary" aria-label="반려동물 추가">
-					<Plus />
-				</Button>
+          <Plus />
+        </Button>
       </div>
 
-			<div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground">
-				<div className="flex size-13 shrink-0 items-center justify-center rounded-xl bg-card text-2xl">
-					🦎
-				</div>
-				<div className="min-w-0">
-					<p className="font-heading text-base font-semibold">도봉이</p>
-					<p className="mt-0.5 truncate text-xs opacity-80">
-						크레스티드 게코 · 2년 4개월 · 수컷
-					</p>
-				</div>
-			</div>
+      <div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground">
+        <div className="flex size-13 shrink-0 items-center justify-center rounded-xl bg-card text-2xl">
+          🦎
+        </div>
+        <div className="min-w-0">
+          <p className="font-heading text-base font-semibold">도봉이</p>
+          <p className="mt-0.5 truncate text-xs opacity-80">
+            크레스티드 게코 · 2년 4개월 · 수컷
+          </p>
+        </div>
+      </div>
 
-			<Panel>
-				<CardContent className="flex flex-col gap-3">
-					<SectionTitle aside="최근 6주">체중</SectionTitle>
-					<div className="flex items-end justify-between gap-3">
-						<div>
-							<p className="text-3xl font-semibold tracking-tight tabular-nums">
-								52.4
-								<span className="ml-1 text-sm font-medium">g</span>
-							</p>
-							<p className="mt-1 text-xs font-medium text-success tabular-nums">
-								6주간 +4.1 g
-							</p>
-						</div>
-						<WeightSparkline series={WEIGHT_SERIES} />
-					</div>
-				</CardContent>
-			</Panel>
+      <Panel>
+        <CardContent className="flex flex-col gap-3">
+          <SectionTitle aside="최근 6주">체중</SectionTitle>
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-3xl font-semibold tracking-tight tabular-nums">
+                52.4
+                <span className="ml-1 text-sm font-medium">g</span>
+              </p>
+              <p className="mt-1 text-xs font-medium text-success tabular-nums">
+                6주간 +4.1 g
+              </p>
+            </div>
+            <WeightSparkline series={WEIGHT_SERIES} />
+          </div>
+        </CardContent>
+      </Panel>
 
-		</Screen>
-	);
+    </Screen>
+  );
 }
 
 /** 최근 6주 체중을 한 줄로 보여주는 스파크라인. 끝점만 강조한다. */
 function WeightSparkline({ series }: { series: number[] }) {
-	const width = 128;
-	const height = 52;
-	const padding = 6;
-	const min = Math.min(...series);
-	const max = Math.max(...series);
-	const span = max - min || 1;
+  const width = 128;
+  const height = 52;
+  const padding = 6;
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const span = max - min || 1;
 
-	const points = series.map((value, index) => {
-		const x = padding + (index * (width - padding * 2)) / (series.length - 1);
-		const y = height - padding - ((value - min) / span) * (height - padding * 2);
-		return [x, y] as const;
-	});
+  const points = series.map((value, index) => {
+    const x = padding + (index * (width - padding * 2)) / (series.length - 1);
+    const y = height - padding - ((value - min) / span) * (height - padding * 2);
+    return [x, y] as const;
+  });
 
-	const last = points[points.length - 1];
+  const last = points[points.length - 1];
 
-	return (
-		<svg
-			width={width}
-			height={height}
-			viewBox={`0 0 ${width} ${height}`}
-			role="img"
-			aria-label={`체중 추이 ${min}g에서 ${max}g`}
-			className="shrink-0"
-		>
-			<polyline
-				points={points.map(([x, y]) => `${x},${y}`).join(" ")}
-				fill="none"
-				stroke="var(--primary)"
-				strokeWidth={2.2}
-				strokeLinecap="round"
-				strokeLinejoin="round"
-			/>
-			<circle cx={last[0]} cy={last[1]} r={3.4} fill="var(--primary)" />
-		</svg>
-	);
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      role="img"
+      aria-label={`체중 추이 ${min}g에서 ${max}g`}
+      className="shrink-0"
+    >
+      <polyline
+        points={points.map(([x, y]) => `${x},${y}`).join(" ")}
+        fill="none"
+        stroke="var(--primary)"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx={last[0]} cy={last[1]} r={3.4} fill="var(--primary)" />
+    </svg>
+  );
 }
