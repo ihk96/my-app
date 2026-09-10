@@ -34,39 +34,42 @@ const CARE_LOG = [
 
 export default function CareSidePage(){
   return (
-    <div>
-      <Panel>
-				<CardContent className="flex flex-col gap-3">
-          <SectionTitle 
-            aside={
-              <DrawerPage
-                trigger={<Button size={"xs"} variant={"ghost"}>편집</Button>}
-                title="돌봄 항목"
-              >
-                <CareItemSidePage/>
-              </DrawerPage>
-              
-            }
-          >
-            돌봄 항목
-          </SectionTitle>
-					<RowGroup>
-						{CARE_LOG.map((entry) => (
-							<Row
-								key={entry.title}
-								media={entry.media}
-								title={entry.title}
-								description={entry.description}
-								trailing={
-									<Badge className={entry.badge.className}>
-										{entry.badge.label}
-									</Badge>
-								}
-							/>
-						))}
-					</RowGroup>
-				</CardContent>
-			</Panel>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <SectionTitle 
+          aside={
+            <DrawerPage
+              trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
+              title="돌봄 항목 추가"
+              description="새로운 돌봄 항목을 추가합니다."
+            >
+              <CareItemSidePage/>
+            </DrawerPage>
+            
+          }
+        >
+          돌봄 항목
+        </SectionTitle>
+        <Panel>
+          <CardContent className="flex flex-col gap-3">
+            <RowGroup>
+              {CARE_LOG.map((entry) => (
+                <Row
+                  key={entry.title}
+                  media={entry.media}
+                  title={entry.title}
+                  description={entry.description}
+                  trailing={
+                    <Badge className={entry.badge.className}>
+                      {entry.badge.label}
+                    </Badge>
+                  }
+                />
+              ))}
+            </RowGroup>
+          </CardContent>
+        </Panel>
+      </div>
     </div>
   );
 }

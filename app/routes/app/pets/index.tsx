@@ -61,39 +61,41 @@ export default function PetsHome() {
 				// }
 			/>
 
-      <SectionTitle 
-        aside={
-          <DrawerPage
-            trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
-            title="돌봄 기록"
-            // description="전체 돌봄 기록을 확인하세요"
-          >
-            <CareSidePage/>
-          </DrawerPage>
-          
-        }
-      >
-        돌봄 기록
-      </SectionTitle>
-      <Panel>
-				<CardContent className="flex flex-col gap-3">
-					<RowGroup>
-						{CARE_LOG.map((entry) => (
-							<Row
-								key={entry.title}
-								media={entry.media}
-								title={entry.title}
-								description={entry.description}
-								trailing={
-									<Badge className={entry.badge.className}>
-										{entry.badge.label}
-									</Badge>
-								}
-							/>
-						))}
-					</RowGroup>
-				</CardContent>
-			</Panel>
+      <div className="flex flex-col gap-1">
+        <SectionTitle 
+          aside={
+            <DrawerPage
+              trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
+              title="돌봄 기록"
+              // description="전체 돌봄 기록을 확인하세요"
+            >
+              <CareSidePage/>
+            </DrawerPage>
+            
+          }
+        >
+          돌봄 기록
+        </SectionTitle>
+        <Panel>
+          <CardContent className="flex flex-col gap-3">
+            <RowGroup>
+              {CARE_LOG.map((entry) => (
+                <Row
+                  key={entry.title}
+                  media={entry.media}
+                  title={entry.title}
+                  description={entry.description}
+                  trailing={
+                    <Badge className={entry.badge.className}>
+                      {entry.badge.label}
+                    </Badge>
+                  }
+                />
+              ))}
+            </RowGroup>
+          </CardContent>
+        </Panel>
+      </div>
       
       <div className="flex justify-between gap-2">
         <ScrollArea className={"flex-1 min-w-0"}>

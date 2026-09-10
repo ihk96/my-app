@@ -172,6 +172,10 @@ body {
   -webkit-touch-callout: none;
 }
 
+* {
+  font-family: "NanumSquare";
+}
+
 /* 노치/홈 인디케이터 피하기 */
 .app-shell {
   padding-top: env(safe-area-inset-top);
