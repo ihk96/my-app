@@ -1,0 +1,1 @@
+import{V as e,W as t}from"./utils-D8DF_fE-.js";import{h as n}from"./FloatingPortal-BArOEC4T.js";function r(e){return n(e,`base-ui`)}var i=t(e(),1);function a({controlled:e,default:t,name:n,state:r=`value`}){let{current:a}=i.useRef(e!==void 0),[o,s]=i.useState(t);return[a?e:o,i.useCallback(e=>{a||s(e)},[])]}export{r as n,a as t};

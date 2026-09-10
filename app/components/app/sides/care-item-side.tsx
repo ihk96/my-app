@@ -2,8 +2,6 @@ import { CardContent } from "~/components/ui/card";
 import { Panel, Row, RowGroup, SectionTitle } from "../screen";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { DrawerPage } from "~/components/ui/drawer-page";
-import CareItemSidePage from "./care-item-side";
 
 const CARE_LOG = [
 	{
@@ -32,21 +30,12 @@ const CARE_LOG = [
 	},
 ];
 
-export default function CareSidePage(){
+export default function CareItemSidePage(){
   return (
     <div>
       <Panel>
 				<CardContent className="flex flex-col gap-3">
           <SectionTitle 
-            aside={
-              <DrawerPage
-                trigger={<Button size={"xs"} variant={"ghost"}>편집</Button>}
-                title="돌봄 항목"
-              >
-                <CareItemSidePage/>
-              </DrawerPage>
-              
-            }
           >
             돌봄 항목
           </SectionTitle>

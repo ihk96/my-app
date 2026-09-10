@@ -66,7 +66,7 @@ export default function PetsHome() {
           <DrawerPage
             trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
             title="돌봄 기록"
-            description="최근 기록을 확인하세요"
+            // description="전체 돌봄 기록을 확인하세요"
           >
             <CareSidePage/>
           </DrawerPage>
