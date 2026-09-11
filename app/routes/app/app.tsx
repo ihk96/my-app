@@ -33,7 +33,7 @@ export default function App({loaderData}:Route.ComponentProps) {
         {app_user ? 
           (
             <>
-              <main className="min-h-0 mb-[calc(env(safe-area-inset-bottom)+4.5rem)]">
+              <main className="min-h-0 pb-[calc(env(safe-area-inset-bottom)+4.5rem)]">
                 <Outlet />
               </main>
               <AppFooter />
