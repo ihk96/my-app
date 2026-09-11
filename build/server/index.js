@@ -263,7 +263,7 @@ function Layout({ children }) {
 			}),
 			/* @__PURE__ */ jsx("meta", {
 				name: "apple-mobile-web-app-status-bar-style",
-				content: "default"
+				content: "black-translucent"
 			}),
 			/* @__PURE__ */ jsx(Meta, {}),
 			/* @__PURE__ */ jsx(Links, {})
@@ -322,7 +322,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-8_GPTvDS.js",
+			"module": "/assets/root-Bh3H-F1n.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/react-dom-MyUVqu9L.js",
@@ -338,7 +338,7 @@ var server_manifest_default = {
 				"/assets/loader-circle-DOJZVfP1.js",
 				"/assets/triangle-alert-Ciz7OvoX.js"
 			],
-			"css": ["/assets/root-BULV1whN.css"],
+			"css": ["/assets/root-CzqgvOwC.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -386,7 +386,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/app-main-DRqo0yo0.js",
+			"module": "/assets/app-main-CGPwOCbm.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/jsx-runtime-B33W4qnm.js",
@@ -513,7 +513,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-BgV8ZS_N.js",
+			"module": "/assets/index-CKZn7yNi.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/react-dom-MyUVqu9L.js",
@@ -603,8 +603,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-943f99cd.js",
-	"version": "943f99cd",
+	"url": "/assets/manifest-d8ac39a8.js",
+	"version": "d8ac39a8",
 	"sri": void 0
 };
 //#endregion
