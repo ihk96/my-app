@@ -56,7 +56,7 @@ export function DrawerPage({
         {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
         
         <DrawerContent className={cn(
-            "w-screen! rounded-none! bg-background m-0! data-ending-style:duration-800", className,
+            "h-screen! w-screen! rounded-none! bg-background m-0! data-ending-style:duration-800", className,
             "data-nested-drawer-open:brightness-70 [--stack-step:0] [--peek:0px]",
             "data-nested-drawer-open:*:data-[slot=drawer-content]:opacity-100!",
             "data-nested-drawer-open:not-data-nested-drawer-page-open:*:data-[slot=drawer-content]:blur-sm!"
