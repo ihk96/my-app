@@ -1,5 +1,4 @@
-import { format } from "date-fns";
-import { ChevronDownIcon, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import Fi from "zod/v4/locales/fi.cjs";
 
@@ -14,17 +13,12 @@ import {
   StatTile,
 } from "~/components/app/screen";
 import CareSidePage from "~/components/app/sides/care-side";
+import { CareLogDrawer } from "~/components/app/sides/care-log-form";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Calendar } from "~/components/ui/calendar";
 import { CardContent } from "~/components/ui/card";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "~/components/ui/drawer";
 import { DrawerPage } from "~/components/ui/drawer-page";
-import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { Textarea } from "~/components/ui/textarea";
 
 const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉"];
 
@@ -88,81 +82,9 @@ export default function PetsHome() {
         <Panel>
           <CardContent className="flex flex-col gap-3">
             <RowGroup>
-              {CARE_LOG.map((entry) => {
-                const [open, setOpen] = useState(false);
-                const [date, setDate] = useState<Date>(new Date())
-
-                return (
-                  <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-                    <Row
-                      onClick={() => setOpen(true)}
-                      key={entry.title}
-                      media={entry.media}
-                      title={entry.title}
-                      description={entry.description}
-                      trailing={
-                        <Badge className={entry.badge.className}>
-                          {entry.badge.label}
-                        </Badge>
-                      }
-                    />
-                    <DrawerContent>
-                      <DrawerHeader>
-                        <DrawerTitle>돌봄 기록 · {entry.title}</DrawerTitle>
-                        <DrawerDescription>{entry.description}</DrawerDescription>
-                      </DrawerHeader>
-                      <div className="p-4 flex-col flex gap-4">
-                        <div>
-                          <FieldGroup>
-                            <Field>
-                              <FieldLabel>날짜<span className="text-destructive">*</span></FieldLabel>
-                              <div className="flex gap-2">
-                                {/* <Popover>
-                                  <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-53 justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "yyyy-MM-dd") : <span>Pick a date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
-                                  <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                      className="w-full"
-                                      required
-                                      mode="single"
-                                      selected={date}
-                                      onSelect={setDate}
-                                      defaultMonth={date}
-                                    />
-                                  </PopoverContent>
-                                </Popover> */}
-                                <Input
-                                  required
-                                  type="date"
-                                  id="date-picker-optional"
-                                  step="1"
-                                  defaultValue={new Date().toISOString().split("T")[0]}
-                                  className="text-sm appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                />
-                                <Input
-                                  required
-                                  type="time"
-                                  id="time-picker-optional"
-                                  step="1"
-                                  defaultValue={new Date().toISOString().split("T")[1].slice(0, 8)}
-                                  className="text-sm appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                />
-                              </div>
-                            </Field>
-                            <Field>
-                              <FieldLabel>기록</FieldLabel>
-                              <Textarea placeholder="돌봄 기록을 입력하세요" />
-                            </Field>
-                          </FieldGroup>
-                        </div>
-                        <p>
-                          돌봄 기록을 남기시겠습니까?
-                        </p>
-                        <Button>기록 남기기</Button>
-                      </div>
-                    </DrawerContent>
-                  </Drawer>
-                )
-              })}
+              {CARE_LOG.map((entry) => (
+                <CareLogRow key={entry.title} entry={entry} />
+              ))}
             </RowGroup>
           </CardContent>
         </Panel>
@@ -219,6 +141,31 @@ export default function PetsHome() {
       </Panel>
 
     </Screen>
+  );
+}
+
+/** 돌봄 기록 한 줄. 시트 열림 상태를 줄마다 따로 들어야 해서 컴포넌트로 분리한다. */
+function CareLogRow({ entry }: { entry: (typeof CARE_LOG)[number] }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Row
+        onClick={() => setOpen(true)}
+        media={entry.media}
+        title={entry.title}
+        description={entry.description}
+        trailing={
+          <Badge className={entry.badge.className}>{entry.badge.label}</Badge>
+        }
+      />
+      <CareLogDrawer
+        title={`돌봄 기록 · ${entry.title}`}
+        description={entry.description}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
   );
 }
 

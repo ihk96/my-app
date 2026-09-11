@@ -245,7 +245,7 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
               <Input
                 id="care-item-interval"
                 type="number"
-                min={1}
+                min={0}
                 inputMode="numeric"
                 max={maxInterval[unit]}
                 disabled={intervalLocked}
@@ -254,7 +254,7 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
                   const parsed = Number(e.target.value);
                   if (!Number.isFinite(parsed)) return;
                   updateRecurrence({
-                    interval: Math.min(Math.max(Math.trunc(parsed), 1), maxInterval[unit]),
+                    interval: Math.min(Math.max(Math.trunc(parsed), 0), maxInterval[unit]),
                   });
                 }}
                 className="w-24"
