@@ -29,11 +29,11 @@ export default function App({loaderData}:Route.ComponentProps) {
   },[user])
   
 	return (
-      <div className="flex h-screen w-full flex-col bg-background text-foreground">
+      <div className="flex w-full flex-col bg-background text-foreground">
         {app_user ? 
           (
             <>
-              <main className="min-h-0 overflow-y-auto mb-[calc(env(safe-area-inset-bottom)+4.5rem)]">
+              <main className="min-h-0 mb-[calc(env(safe-area-inset-bottom)+4.5rem)]">
                 <Outlet />
               </main>
               <AppFooter />
