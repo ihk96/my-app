@@ -1,0 +1,1 @@
+import{o as e,t}from"./jsx-runtime-B33W4qnm.js";import{t as n}from"./lib-CQzmo9GT.js";import"./users-DAAOtI4q.js";var r=t(),i=e(function(){return(0,r.jsx)(`div`,{children:(0,r.jsx)(n,{to:`/test`,viewTransition:!0,children:`Go to Test`})})});export{i as default};

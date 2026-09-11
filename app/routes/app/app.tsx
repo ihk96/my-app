@@ -29,8 +29,16 @@ export default function App({loaderData}:Route.ComponentProps) {
   },[user])
   
 	return (
-    <div className="fixed top-0 h-screen w-screen">
-      <div className="flex h-full w-full flex-col bg-background text-foreground">
+    <div className="fixed top-0 h-screen w-screen bg-black">
+      <div className="flex flex-col h-full w-full">
+        <div className="flex-1 min-h-0 overflow-auto border-white border">
+          <div className="h-15 border-white border"></div>
+        </div>
+        <div className="flex shrink-0 border-white border">
+          <div className="h-15"></div>
+        </div>
+      </div>
+      {/* <div className="flex h-full w-full flex-col bg-background text-foreground">
         {app_user ? 
           (
             <>
@@ -48,7 +56,7 @@ export default function App({loaderData}:Route.ComponentProps) {
           )
         }
         
-      </div>
+      </div> */}
     </div>
 	);
 }
