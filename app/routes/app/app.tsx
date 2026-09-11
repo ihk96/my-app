@@ -34,7 +34,7 @@ export default function App({loaderData}:Route.ComponentProps) {
         {app_user ? 
           (
             <>
-              <main className="min-h-0 flex-1 overflow-auto">
+              <main className="min-h-0 flex-1 overflow-auto pt-[env(safe-area-inset-top)]">
                 <Outlet />
               </main>
               <AppFooter />
@@ -62,7 +62,7 @@ const TABS = [
 
 function AppFooter() {
 	return (
-		<nav className="flex w-screen shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+		<nav className="flex w-screen shrink-0 items-center justify-around border-t bg-card px-2 pt-1.5 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
 			{TABS.map((tab) => (
 				<NavLink
 					key={tab.to}

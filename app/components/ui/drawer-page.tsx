@@ -63,26 +63,28 @@ export function DrawerPage({
           )} 
           data-nested-drawer-page-open={nestedPages > 0 ? "" : undefined}
           {...props}>
-          <DrawerHeader className="pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-xs pt-[max(env(safe-area-inset-top)+1rem,1rem)]">
-            <div>
-              <DrawerTitle>
-                <div className="flex items-center gap-2">
-                  <Button variant={"secondary"} 
-                          className={"size-6"} 
-                          size="icon"
-                          onClick={() => setIsOpen(false)}
-                  >
-                    <ChevronLeft className="size-4" />
-                  </Button>
-                  {props.title}
-                </div>
-              </DrawerTitle>
-              <DrawerDescription>{props.description}</DrawerDescription>
+          <div className="min-h-0 overflow-auto">
+            <DrawerHeader className="pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+1rem)]">
+              <div>
+                <DrawerTitle>
+                  <div className="flex items-center gap-2">
+                    <Button variant={"secondary"} 
+                            className={"size-6"} 
+                            size="icon"
+                            onClick={() => setIsOpen(false)}
+                    >
+                      <ChevronLeft className="size-4" />
+                    </Button>
+                    {props.title}
+                  </div>
+                </DrawerTitle>
+                {/* <DrawerDescription>{props.description}</DrawerDescription> */}
+              </div>
+              {action && <div>{action}</div>}
+            </DrawerHeader>
+            <div className="pb-8 pt-[calc(env(safe-area-inset-top)+1rem+2.5rem)] px-4">
+              {children}
             </div>
-            {action && <div>{action}</div>}
-          </DrawerHeader>
-          <div className="pb-8 pt-14 px-4">
-            {children}
           </div>
         </DrawerContent>
       </Drawer>

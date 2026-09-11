@@ -322,7 +322,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": true,
-			"module": "/assets/root-CkTKLW9i.js",
+			"module": "/assets/root-h1dG6WBO.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/react-dom-MyUVqu9L.js",
@@ -338,7 +338,7 @@ var server_manifest_default = {
 				"/assets/loader-circle-DOJZVfP1.js",
 				"/assets/triangle-alert-Ciz7OvoX.js"
 			],
-			"css": ["/assets/root-C7LbHPTG.css"],
+			"css": ["/assets/root-BdYFgcTb.css"],
 			"clientActionModule": void 0,
 			"clientLoaderModule": void 0,
 			"clientMiddlewareModule": void 0,
@@ -386,7 +386,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/app-main-C51Cb7T-.js",
+			"module": "/assets/app-main-ByPfR2TJ.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/jsx-runtime-B33W4qnm.js",
@@ -513,7 +513,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-BlQzJCbz.js",
+			"module": "/assets/index-DnMx6_82.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/react-dom-MyUVqu9L.js",
@@ -603,8 +603,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-f254f8cc.js",
-	"version": "f254f8cc",
+	"url": "/assets/manifest-fbc7aec6.js",
+	"version": "fbc7aec6",
 	"sri": void 0
 };
 //#endregion
