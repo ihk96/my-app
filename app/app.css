@@ -166,7 +166,6 @@ html, body {
   height: 100vh;              /* vh 대신 dvh: 주소창 접힘에 안 흔들림 */
   overscroll-behavior: none;   /* 당겨서 새로고침, 바운스 제거 */
   -webkit-tap-highlight-color: transparent;  /* 탭할 때 파란 박스 제거 */
-  overflow-y: auto;
 }
 
 body {
