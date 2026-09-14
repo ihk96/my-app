@@ -9,7 +9,7 @@ import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Button } from "~/components/ui/button";
 import { Toggle } from "~/components/ui/toggle";
 
-const PETS = ["도봉이", "꼬미","도봉일","도봉삼","도봉사","도봉오","도봉육"];
+const SPECIES = [{ label: "도마뱀", value: "도마뱀" }, { label: "거북이", value: "거북이" }, { label: "뱀", value: "뱀" }, { label: "고양이", value: "고양이" }, { label: "강아지", value: "강아지" }, { label: "햄스터", value: "햄스터" }, { label: "기타", value: "기타" }];
 
 export type RecurrenceUnit = "day" | "week" | "month";
 
@@ -148,8 +148,7 @@ type CareItemFormProps = {
 export default function CareItemForm({ value: controlled, onChange }: CareItemFormProps) {
   const [internal, setInternal] = useState<CareItemFormValue>(controlled ?? defaultValue);
   const value = controlled ?? internal;
-  const [allSelected, setAllSelected] = useState(false);
-  const [selectedPets, setSelectedPets] = useState<string[]>([]);
+  const [selectedSpecies, setSelectedSpecies] = useState<string>("");
 
   const update = (patch: Partial<CareItemFormValue>) => {
     const next = { ...value, ...patch };
@@ -195,49 +194,36 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
   return (
     <FieldGroup>
       <Field>
-        <FieldLabel htmlFor="care-item-name">항목 이름</FieldLabel>
+        <FieldLabel htmlFor="care-item-name">이름</FieldLabel>
         <Input
           id="care-item-name"
           type="text"
           value={value.name}
           onChange={(e) => update({ name: e.target.value })}
-          placeholder="예) 산책, 발톱 깎기"
+          placeholder="예) 도봉이, 오월"
         />
       </Field>
       <Field>
-        <FieldLabel>대상 반려동물
-          <Toggle
-            variant="outline"
-            size="sm"
-            pressed={allSelected}
-            onPressedChange={(b) => {
-              setAllSelected(b);
-              if(b){
-                setSelectedPets([...PETS]);
-              } else {
-                setSelectedPets([]);
-              }
-            }}
-          >
-            {allSelected && "전체 해제"}
-            {!allSelected && "전체 선택"}
-          </Toggle>
+        <FieldLabel>종
         </FieldLabel>
-        <ScrollArea className={"flex-1 min-w-0"}>
-          <div className="flex gap-2">
-            <ToggleGroup variant={"outline"} multiple value={selectedPets} onValueChange={v=>{setSelectedPets(v); if(v.length === PETS.length){setAllSelected(true);} else {setAllSelected(false);}}}>
-              {PETS.map((pet) => (
-                <ToggleGroupItem
-                  key={pet}
-                  value={pet}
-                >
-                  {pet}
-                </ToggleGroupItem>
-              ))}
-          </ToggleGroup>
-          </div>
-          <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
-        </ScrollArea>
+        <Select
+            items={SPECIES}
+            value={selectedSpecies}
+            onValueChange={(next) => setSelectedSpecies(next)}
+          >
+            <SelectTrigger className="flex-1">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {SPECIES.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
       </Field>
 
       <Field>

@@ -19,8 +19,9 @@ import { Button } from "~/components/ui/button";
 import { CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
-const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉"];
+const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉","꼬꼬미"];
 
 const WEIGHT_SERIES = [48.3, 49.1, 50.0, 50.6, 51.7, 52.4];
 
@@ -90,24 +91,37 @@ export default function PetsHome() {
         </Panel>
       </div>
 
-      <div className="flex justify-between gap-2">
-        <ScrollArea className={"flex-1 min-w-0"}>
-          <div className="flex gap-2">
-            {PETS.map((pet, index) => (
-              <Badge
-                key={pet}
-                variant={index === 0 ? "default" : "outline"}
-                className="h-7 px-3 text-xs"
-              >
-                {pet}
-              </Badge>
-            ))}
-          </div>
-          <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
-        </ScrollArea>
-        <Button className={"shrink-0"} size="icon-sm" variant="secondary" aria-label="반려동물 추가">
-          <Plus />
-        </Button>
+      <div className="flex flex-col gap-1">
+        <SectionTitle
+          aside={
+            <DrawerPage
+              trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
+              title="반려 동물"
+            // description="전체 반려 동물을 확인하세요"
+            >
+              <CareSidePage />
+            </DrawerPage>
+
+          }
+        >
+          반려 동물
+        </SectionTitle>
+        <div className="flex justify-between gap-2">
+          <ScrollArea className={"w-full"}>
+            <ToggleGroup variant={"outline"}>
+              {PETS.map((pet) => (
+                <ToggleGroupItem
+                  className="data-pressed:bg-primary data-pressed:text-primary-foreground"
+                  key={pet}
+                  value={pet}
+                >
+                  {pet}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+            <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
+          </ScrollArea>
+        </div>
       </div>
 
       <div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground">
