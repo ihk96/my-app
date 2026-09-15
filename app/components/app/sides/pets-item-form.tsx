@@ -146,7 +146,7 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
                 </Select>
             </Field>
 
-            <Field>
+            <Field className="w-40">
               <FieldLabel>생일</FieldLabel>
               <Input
                 id="care-item-birthday"
@@ -155,7 +155,7 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
                 onChange={(e) => update({ birthday: new Date(e.target.value) })}
               />
             </Field>
-            <Field>
+            <Field className="w-40">
               <FieldLabel>가족이 된 날</FieldLabel>
               <Input
                 id="care-item-family-date"

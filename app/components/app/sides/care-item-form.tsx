@@ -354,10 +354,11 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
             </Field>
           )}
 
-          <Field>
+          <Field className="w-full">
             <FieldLabel htmlFor="care-item-start">시작일</FieldLabel>
             <Input
               id="care-item-start"
+              className="w-40!"
               type="date"
               value={startDate}
               onChange={(e) => updateRecurrence({ startDate: e.target.value })}
