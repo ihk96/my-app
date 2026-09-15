@@ -125,7 +125,7 @@ export function CareLogDrawer({
       showSwipeHandle
       swipeDirection="down"
     >
-      <DrawerContent className="mb-[env(safe-area-inset-bottom) + 1rem] pb-4">
+      <DrawerContent className="mb-[env(safe-area-inset-bottom) + 4rem] pb-4">
         <DrawerHeader>
           <DrawerTitle>{title}</DrawerTitle>
           {description ? (
