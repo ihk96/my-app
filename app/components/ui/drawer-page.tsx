@@ -57,14 +57,16 @@ export function DrawerPage({
         
         <DrawerContent className={cn(
             "h-screen! w-screen! rounded-none! bg-background m-0! data-ending-style:duration-800", className,
-            "data-nested-drawer-open:brightness-70 [--stack-step:0] [--peek:0px]",
+            "[--stack-step:0] [--peek:0px]",
             "data-nested-drawer-open:*:data-[slot=drawer-content]:opacity-100!",
-            "data-nested-drawer-open:not-data-nested-drawer-page-open:*:data-[slot=drawer-content]:blur-sm!"
+            "data-nested-drawer-open:not-data-nested-drawer-page-open:*:data-[slot=drawer-content]:blur-sm!",
+            "data-nested-drawer-open:data-nested-drawer-page-open:brightness-100",
+            "data-nested-drawer-open:not-data-nested-drawer-page-open:brightness-70"
           )} 
           data-nested-drawer-page-open={nestedPages > 0 ? "" : undefined}
           {...props}>
           <div className="min-h-0 overflow-auto">
-            <DrawerHeader className="pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+2rem)]">
+            <DrawerHeader className="z-10 pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+2rem)]">
               <div>
                 <DrawerTitle>
                   <div className="flex items-center gap-2">
@@ -82,7 +84,7 @@ export function DrawerPage({
               </div>
               {action && <div>{action}</div>}
             </DrawerHeader>
-            <div className="pb-8 pt-[calc(env(safe-area-inset-top)+1rem+2.5rem)] px-4">
+            <div className="pb-8 pt-[calc(env(safe-area-inset-top)+4.5rem)] px-4">
               {children}
             </div>
           </div>

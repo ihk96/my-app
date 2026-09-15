@@ -20,6 +20,7 @@ import { CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import PetsItemForm from "~/components/app/sides/pets-item-form";
 
 const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉","꼬꼬미"];
 
@@ -96,12 +97,10 @@ export default function PetsHome() {
           aside={
             <DrawerPage
               trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
-              title="반려 동물"
-            // description="전체 반려 동물을 확인하세요"
+              title="반려 동물 추가"
             >
-              <CareSidePage />
+              <PetsItemForm />
             </DrawerPage>
-
           }
         >
           반려 동물
@@ -131,12 +130,18 @@ export default function PetsHome() {
         <div className="min-w-0">
           <p className="font-heading text-base font-semibold">도봉이</p>
           <p className="mt-0.5 truncate text-xs opacity-80">
-            크레스티드 게코 · 2년 4개월 · 수컷
+            도마뱀 · 수컷
+          </p>
+          <p className="mt-0.5 truncate text-xs opacity-80">
+             🎂2년 4개월 · 🏠2년 4개월
+          </p>
+          <p className="mt-0.5 truncate text-xs opacity-80">
+            크레스티드 게코 · 트익할
           </p>
         </div>
       </div>
 
-      <Panel>
+      {/* <Panel>
         <CardContent className="flex flex-col gap-3">
           <SectionTitle aside="최근 6주">체중</SectionTitle>
           <div className="flex items-end justify-between gap-3">
@@ -152,7 +157,7 @@ export default function PetsHome() {
             <WeightSparkline series={WEIGHT_SERIES} />
           </div>
         </CardContent>
-      </Panel>
+      </Panel> */}
 
     </Screen>
   );
