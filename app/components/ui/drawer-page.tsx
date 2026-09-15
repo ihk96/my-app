@@ -64,7 +64,7 @@ export function DrawerPage({
           data-nested-drawer-page-open={nestedPages > 0 ? "" : undefined}
           {...props}>
           <div className="min-h-0 overflow-auto">
-            <DrawerHeader className="pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+1rem)]">
+            <DrawerHeader className="pb-2 flex justify-between flex-row items-start fixed top-0 w-full backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+2rem)]">
               <div>
                 <DrawerTitle>
                   <div className="flex items-center gap-2">

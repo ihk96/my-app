@@ -15,7 +15,7 @@ function Panel({ className, ...props }: React.ComponentProps<typeof Card>) {
 function Screen({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-col gap-4 px-4 pt-3 pb-6", className)}
+      className={cn("flex flex-col gap-4 px-4 pt-[calc(env(safe-area-inset-top)+2rem)] pb-6", className)}
       {...props}
     />
   );
