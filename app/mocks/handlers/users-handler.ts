@@ -10,8 +10,9 @@ export const usersHandler = [
       id: "test",
       login_id: "test",
       name: "테스터",
-      created_at: new Date(),
-      last_login_at: new Date()
+      created_at: new Date().toISOString(),
+      last_login_at: new Date().toISOString(),
+      is_admin: true,
     }
 
     return HttpResponse.json(userData);
