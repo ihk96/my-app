@@ -61,11 +61,11 @@ export default {
 }
 
 export const UpdateFamilyRequestData = z.object({
-  family_name: z.string().optional(),
-  is_inviting: z.boolean().optional(),
-  feature_pets: z.boolean().optional(),
-  feature_inventory: z.boolean().optional(),
-  feature_account_book: z.boolean().optional(),
+  family_name: z.string(),
+  is_inviting: z.boolean(),
+  feature_pets: z.boolean(),
+  feature_inventory: z.boolean(),
+  feature_account_book: z.boolean(),
 });
 
 export const FamilyJoinRequestsResponseData = z.object({

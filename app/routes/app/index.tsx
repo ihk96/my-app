@@ -54,7 +54,7 @@ export default function AppHome() {
 	return (
 		<Screen>
 			<ScreenHeader
-				title={`안녕하세요, ${user.name}님`}
+				title={`안녕하세요, ${user?.name ?? ""}님`}
 				subtitle="9월 3일 목요일 · 처리할 일 3"
 				action={
 					<Avatar className="size-9">

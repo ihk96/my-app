@@ -18,6 +18,6 @@ export const UserData = z.object({
   id: z.string(),
   login_id: z.string(),
   name: z.string(),
-  created_at: z.date(),
-  last_login_at: z.date(),
+  created_at: z.iso.datetime(),
+  last_login_at: z.iso.datetime().optional(),
 });

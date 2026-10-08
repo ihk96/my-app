@@ -4,12 +4,12 @@ import { NavLink, Outlet, replace, useLoaderData } from "react-router";
 
 import { cn } from "~/lib/utils";
 import users from "~/services/users";
-import type { Route } from "./+types";
 import { useContext, useEffect } from "react";
 import { useAppState } from "~/stores/app-state";
 import { Spinner } from "~/components/ui/spinner";
+import type { Route } from "./+types/app";
 
-export async function clientLoader() {
+export async function clientLoader({}: Route.ClientLoaderArgs) {
   const user = await users.me()
     .then(res=>res.data);
   return {

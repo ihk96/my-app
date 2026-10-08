@@ -10,5 +10,6 @@ export default [
 		route("pets-concept", "routes/app/pets/index-concept.tsx"),
 	]),
 	route("login", "routes/login.tsx"),
+  route("signup/:id", "routes/signup.$id.tsx")
 
 ] satisfies RouteConfig;
