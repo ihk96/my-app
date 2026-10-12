@@ -9,7 +9,9 @@ export default [
 		route("pets", "routes/app/pets/index.tsx"),
 		route("pets-concept", "routes/app/pets/index-concept.tsx"),
 	]),
+	route("new-family", "routes/newFamily.tsx"),
 	route("login", "routes/login.tsx"),
-  route("signup/:id", "routes/signup.$id.tsx")
+  route("signup/:id", "routes/signup.$id.tsx"),
+  route("welcome", "routes/welcome.tsx"),
 
 ] satisfies RouteConfig;

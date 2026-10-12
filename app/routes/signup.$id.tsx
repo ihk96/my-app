@@ -8,10 +8,9 @@ import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { toast } from "~/components/ui/toast";
 import { cn } from "~/lib/utils";
-import login from "~/services/login";
 import users, { UserInvitationResponseData } from "~/services/users";
 import type { Route } from "./+types/signup.$id";
-import type { z } from "zod/v4";
+import z from "zod/v4";
 
 export async function clientLoader({params}: Route.ClientLoaderArgs) {
   if(!params.id) {
@@ -63,40 +62,82 @@ export function SignupForm({
   const [signupError, setSignupError] = useState("");
   const [signupPending, setSignupPending] = useState(false);
 
-	function handleActionLogin() {
-    setSignupPending(true);
-    setLoginIdError("");
-    setPasswordError("");
-    setSignupError("");
+	function handleActionSignup() {
+    let flag = false;
+
+    beforeSignup()
+
+    if(!invitationCode){
+      setInvitationCodeError("초대코드를 입력해주세요.");
+      endSignup();
+      return;
+    }
 
     if(!loginId){
       setLoginIdError("Email을 입력해주세요.");
-    }
-    if(!password){
-      setPasswordError("Password를 입력해주세요.");
+      endSignup();
+      return;
     }
 
-    if(loginId && password){
+    if(!z.validate(z.email(),loginId)){
+      setLoginIdError("Email 형식이 올바르지 않습니다.");
+      endSignup();
+      return;
+    } 
+
+    if(!password){
+      setPasswordError("Password를 입력해주세요.");
+      endSignup();
+      return;
+    }
+
+    if(!passwordConfirm){
+      setPasswordConfirmError("Password 확인을 입력해주세요.");
+      endSignup();
+      return;
+    }
+
+    if(password !== passwordConfirm){
+      setPasswordConfirmError("Password가 일치하지 않습니다.");
+      endSignup();
+      return;
+    }
+
+    if(loginId && password && invitationCode){
       users.signupWithInvitation(invitation.id, {
         invitation_code: invitationCode,
         login_id: loginId,
         password: password,
         name: invitation.name
       }).then(()=>{
-        navigate("/");
+        navigate("/welcome");
       }).catch((e: AxiosError)=>{
-        if(e.status == 401) {
-          setSignupError("입력하신 정보가 일치하지 않습니다.");
+        if(e.status == 409) {
+          setSignupError("이미 가입된 이메일입니다.");
         } else {
-          setSignupError("로그인 과정에서 문제가 발생했습니다.");
+          setSignupError("가입에 실패했습니다.");
         }
       }).finally(()=>{
-        setSignupPending(false);
+        endSignup();
       });
     } else {
-      setSignupPending(false);
+      endSignup();
     }
 	}
+
+  function beforeSignup() {
+    setSignupPending(true);
+    setInvitationCodeError("");
+    setLoginIdError("");
+    setPasswordError("");
+    setSignupError("");
+    setPasswordConfirmError("");
+  }
+
+  function endSignup() {
+    setSignupPending(false);
+  }
+
 
 
 	return (
@@ -117,7 +158,7 @@ export function SignupForm({
 									id="invitation_code"
 									type="text"
 									placeholder="초대코드 입력"
-                  disabled={loginPending}
+                  disabled={signupPending}
 									required
                   value={invitationCode}
                   aria-invalid={invitationCodeError != ""}
@@ -131,7 +172,7 @@ export function SignupForm({
 									id="email"
 									type="email"
 									placeholder="m@example.com"
-                  disabled={loginPending}
+                  disabled={signupPending}
 									required
                   value={loginId}
                   aria-invalid={loginIdError != ""}
@@ -146,7 +187,7 @@ export function SignupForm({
 								<Input 
                   id="password" 
                   type="password" 
-                  disabled={loginPending}
+                  disabled={signupPending}
                   required 
                   value={password}
                   aria-invalid={passwordError != ""}
@@ -161,7 +202,7 @@ export function SignupForm({
 								<Input 
                   id="password_confirm" 
                   type="password" 
-                  disabled={loginPending}
+                  disabled={signupPending}
                   required 
                   value={passwordConfirm}
                   aria-invalid={passwordConfirmError != ""}
@@ -172,11 +213,11 @@ export function SignupForm({
 							<Field>
 								<Button 
                   type="button" 
-                  disabled={loginPending}
-                  onClick={handleActionLogin}
+                  disabled={signupPending}
+                  onClick={handleActionSignup}
                 >
-                  {loginPending && <Spinner />}
-                  LOG IN
+                  {signupPending && <Spinner />}
+                  SIGN UP
                 </Button>
 								<FieldDescription className="text-center">
 								</FieldDescription>

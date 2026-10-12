@@ -18,6 +18,7 @@ export const UserData = z.object({
   id: z.string(),
   login_id: z.string(),
   name: z.string(),
+  is_admin: z.boolean(),
   created_at: z.iso.datetime(),
   last_login_at: z.iso.datetime().optional(),
 });

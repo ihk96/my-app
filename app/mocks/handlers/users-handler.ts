@@ -5,7 +5,7 @@ import { UserInvitationResponseData, UserInvitationSignupRequestData, UserRespon
 export const usersHandler = [
   http.get("/api/users/me", ()=>{
 
-    return HttpResponse.json(null, {status: 401})
+    // return HttpResponse.json(null, {status: 401})
     const userData : z.infer<typeof UserResponseData> = {
       id: "test",
       login_id: "test",
