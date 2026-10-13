@@ -10,9 +10,11 @@ import {
 	SectionTitle,
 	StatTile,
 } from "~/components/app/screen";
+import Profile from "~/components/app/sides/profile";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { CardContent } from "~/components/ui/card";
+import { DrawerPage } from "~/components/ui/drawer-page";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 import { useAppState } from "~/stores/app-state";
 
@@ -58,22 +60,14 @@ export default function AppHome() {
 				title={`안녕하세요, ${user?.name ?? ""}님`}
 				subtitle="9월 3일 목요일 · 처리할 일 3"
 				action={
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Avatar className="size-9">
+          <DrawerPage
+            trigger={<Avatar className="size-9">
               <AvatarFallback className="text-[11px]">{user?.name.charAt(0)}</AvatarFallback>
-            </Avatar>} />
-            <DropdownMenuContent>
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Family</DropdownMenuItem>
-                {user?.is_admin && <DropdownMenuItem>Admin</DropdownMenuItem>}
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem variant="destructive">Log out</DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </Avatar>}
+            title="프로필"
+          >
+            <Profile />
+          </DrawerPage>
 				}
 			/>
 
