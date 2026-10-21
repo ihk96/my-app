@@ -90,6 +90,27 @@ function FamilyInfo({ familyId }: { familyId: string }) {
     <div>
       {family?.name}
       {family?.is_inviting ? "가입 활성" : "가입 비활성"}
+      <Button variant={"outline"} 
+              size={"sm"} 
+              onClick={()=>{
+                families.getFamily(familyId)
+                  .then(res => {
+                    const currentFamily = res.data;
+                    families.updateFamily(familyId, { 
+                      family_name: currentFamily.name,
+                      feature_account_book: currentFamily.feature_account_book,
+                      feature_inventory: currentFamily.feature_inventory,
+                      feature_pets: currentFamily.feature_pets,
+                      is_inviting: !family?.is_inviting,
+                    })
+                      .then(res => {
+                        setFamily(res.data);
+                      });
+                  });
+              }}
+      >
+        {family?.is_inviting ? "초대 비활성화" : "초대 활성화"}
+      </Button>
       {family?.is_inviting && <p>초대 코드: {family?.invitation_code ?? "없음"}</p>}
     </div>
   )
