@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/components/u
 import { DrawerPage } from "~/components/ui/drawer-page";
 import families, { FamiliesResponseData } from "~/services/families";
 import { useAppState } from "~/stores/app-state";
+import AdminInvitations from "./admin-invitations";
 
 export default function Profile() {
   const {user, family, setFamily} = useAppState();
@@ -72,7 +73,17 @@ export default function Profile() {
       >
         <FamilyInfo familyId={family!.id} />
       </DrawerPage>
-
+      
+      {user?.is_admin && (
+        <DrawerPage
+          trigger={
+            <Button variant={"outline"} size={"sm"}>관리자 페이지</Button>
+          }
+          title="관리자 페이지"
+        >
+          <AdminInvitations />
+        </DrawerPage>
+      )}
 
     </div>
   );

@@ -8,7 +8,7 @@ export const adminHandler = [
     const invitations: z.infer<typeof AdminInvitationResponseData>[] = [
       {
         id: uuidv4().toString(),
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         is_used: false,
         name: "Test User",
         created_at: new Date().toISOString(),
@@ -16,7 +16,7 @@ export const adminHandler = [
       },
       {
         id: uuidv4().toString(),
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         is_used: true,
         name: "Another Test User",
         created_at: new Date().toISOString(),
@@ -30,7 +30,7 @@ export const adminHandler = [
 
     const newInvitation: z.infer<typeof AdminInvitationResponseData> = {
       id: uuidv4().toString(),
-      invitation_code: uuidv4().toString(),
+      invitation_code: uuidv4().toString().substring(0,6),
       is_used: false,
       name: body.name,
       created_at: new Date().toISOString(),

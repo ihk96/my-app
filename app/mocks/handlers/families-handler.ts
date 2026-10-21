@@ -20,7 +20,7 @@ export const familiesHandler = [
         id: uuidv4().toString(),
         name: "Sample Family",
         creator_id: uuidv4().toString(),
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         feature_account_book: true,
         feature_inventory: true,
         feature_pets: true,
@@ -34,7 +34,7 @@ export const familiesHandler = [
         id: uuidv4().toString(),
         name: "Test Family",
         creator_id: uuidv4().toString(),
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         feature_account_book: true,
         feature_inventory: true,
         feature_pets: true,
@@ -62,7 +62,7 @@ export const familiesHandler = [
       id: uuidv4().toString(),
       name: "Primary Family",
       creator_id: uuidv4().toString(),
-      invitation_code: uuidv4().toString(),
+      invitation_code: uuidv4().toString().substring(0,6),
       feature_account_book: true,
       feature_inventory: true,
       feature_pets: true,
@@ -83,7 +83,7 @@ export const familiesHandler = [
       id: uuidv4().toString(),
       name: body.name,
       creator_id: uuidv4().toString(),
-      invitation_code: uuidv4().toString(),
+      invitation_code: uuidv4().toString().substring(0,6),
       feature_account_book: body.feature_account_book,
       feature_inventory: body.feature_inventory,
       feature_pets: body.feature_pets,
@@ -113,7 +113,7 @@ export const familiesHandler = [
         family_name: "Test Family",
         user_name: "Sample User",
         handle_status: "Pending",
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         is_handled: false,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -125,7 +125,7 @@ export const familiesHandler = [
         family_name: "Sample Family",
         user_name: "Sample User",
         handle_status: "Approved",
-        invitation_code: uuidv4().toString(),
+        invitation_code: uuidv4().toString().substring(0,6),
         is_handled: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -170,7 +170,7 @@ export const familiesHandler = [
       id: familyId,
       name: "Sample Family",
       creator_id: uuidv4().toString(),
-      invitation_code: uuidv4().toString().substring(0, 8),
+      invitation_code: uuidv4().toString().substring(0,6),
       feature_account_book: false,
       feature_inventory: false,
       feature_pets: false,
@@ -190,7 +190,7 @@ export const familiesHandler = [
       id: familyId,
       name: body.family_name,
       creator_id: uuidv4().toString(),
-      invitation_code: uuidv4().toString().substring(0, 8),
+      invitation_code: uuidv4().toString().substring(0,6),
       feature_account_book: body.feature_account_book,
       feature_inventory: body.feature_inventory,
       feature_pets: body.feature_pets,
@@ -233,7 +233,7 @@ export const familiesHandler = [
   http.post("/api/families/:familyId/regenerate-invitation-code", ({params})=>{
     // TODO: 초대 코드 재발급
     const familyId = params.familyId as string;
-    const newInvitationCode = uuidv4().toString();
+    const newInvitationCode = uuidv4().toString().substring(0,6);
     const family: z.infer<typeof FamiliesResponseData> = {
       id: familyId,
       name: "Sample Family",
