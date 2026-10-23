@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Button } from "~/components/ui/button";
 import { Panel } from "../screen";
 import { CardContent } from "~/components/ui/card";
-import { Attachment, AttachmentAction, AttachmentActions, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle, AttachmentTrigger } from "~/components/ui/attachment";
-import { XIcon } from "lucide-react";
+import { Attachment, AttachmentAction, AttachmentActions, AttachmentMedia, AttachmentTrigger } from "~/components/ui/attachment";
+import { Crop, XIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+import PetsImageCropDialog from "./pets-image-crop-dialog";
 
 const SPECIES = [{label: "종을 선택해주세요.", value: ""}, { label: "도마뱀", value: "도마뱀" }, { label: "거북이", value: "거북이" }, { label: "뱀", value: "뱀" }, { label: "고양이", value: "고양이" }, { label: "강아지", value: "강아지" }, { label: "햄스터", value: "햄스터" }, { label: "기타", value: "기타" }];
 const GENDERS = [{label: "성별을 선택해주세요.", value: ""}, { label: "수컷", value: "수컷" }, { label: "암컷", value: "암컷" }];
@@ -19,6 +20,8 @@ export type PetsItemFormValue = {
   familyDate: Date;
   birthday: Date;
   additionalInfo: string[];
+  originalImage?: File;
+  thumbnailImage?: File;
 };
 
 type PetsItemFormProps = {
@@ -38,9 +41,21 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
   };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const selectedFile = value.originalImage;
+  const thumbnailFile = value.thumbnailImage;
+  const [cropOpen, setCropOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>();
 
+  useEffect(() => {
+    if (!thumbnailFile) {
+      setPreviewUrl(undefined);
+      return;
+    }
 
+    const url = URL.createObjectURL(thumbnailFile);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [thumbnailFile]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -51,39 +66,73 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
               <div className="flex justify-center">
                 <Attachment orientation="vertical" className="size-40">
                   <AttachmentMedia variant="image">
-                    <img src={selectedFile ? URL.createObjectURL(selectedFile) : ""} />
+                    {previewUrl && <img src={previewUrl} alt="반려동물 미리보기" />}
                   </AttachmentMedia>
-                  <AttachmentActions>
-                    <AttachmentAction>
+                  {selectedFile && <AttachmentActions>
+                    <AttachmentAction
+                      aria-label="반려동물 사진 삭제"
+                      onClick={() => update({ originalImage: undefined, thumbnailImage: undefined })}
+                    >
                       <XIcon />
                     </AttachmentAction>
-                  </AttachmentActions>
+                  </AttachmentActions>}
                   {
-                    selectedFile && (
+                    thumbnailFile && (
                       <Dialog>
                         <DialogTrigger>
                           <AttachmentTrigger/>
                         </DialogTrigger>
                         <DialogContent className="w-screen h-screen max-w-none! rounded-none">
-                          <img src={selectedFile ? URL.createObjectURL(selectedFile) : ""} />
+                          {previewUrl && <img src={previewUrl} alt="반려동물 썸네일" className="max-h-full max-w-full object-contain" />}
                         </DialogContent>
                       </Dialog>
                     )
                   }
                   {
-                    !selectedFile && (
+                    !thumbnailFile && (
                       <AttachmentTrigger
                         render={
                             <button
-                              onClick={() => {fileInputRef.current?.click()}}
+                              type="button"
+                              aria-label="반려동물 사진 선택"
+                              onClick={() => fileInputRef.current?.click()}
                             />
                         }
                       />
                     )
                   }
                 </Attachment>
-                <input ref={fileInputRef} type="file" className="hidden" onChange={(e) => { setSelectedFile(e.target.files?.[0] ?? undefined); }} />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    update({ originalImage: file, thumbnailImage: undefined });
+                    setCropOpen(true);
+                    event.target.value = "";
+                  }}
+                />
               </div>
+              {selectedFile && (
+                <div className="flex justify-center gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={() => setCropOpen(true)}>
+                    <Crop />
+                    썸네일 조정
+                  </Button>
+                  <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                    사진 변경
+                  </Button>
+                </div>
+              )}
+              <PetsImageCropDialog
+                file={selectedFile}
+                open={cropOpen}
+                onOpenChange={setCropOpen}
+                onApply={(thumbnailImage) => update({ thumbnailImage })}
+              />
             </Field>
             <Field>
               <FieldLabel htmlFor="care-item-name">이름</FieldLabel>
