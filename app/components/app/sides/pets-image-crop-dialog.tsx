@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -41,13 +41,27 @@ export default function PetsImageCropDialog({
   const [error, setError] = useState<string>();
   const [processing, setProcessing] = useState(false);
 
-  const imageUrl = useMemo(() => file ? URL.createObjectURL(file) : undefined, [file]);
+  const [imageUrl, setImageUrl] = useState<string>();
 
   useEffect(() => {
-    return () => {
-      if (imageUrl) URL.revokeObjectURL(imageUrl);
+    if (!file) {
+      setImageUrl(undefined);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setImageUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  // blob URL을 이미지로 불러오지 못하는 환경(iOS Safari 등)에서는 data URL로 한 번 더 시도한다.
+  function loadAsDataUrl(target: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") setImageUrl(reader.result);
     };
-  }, [imageUrl]);
+    reader.onerror = () => setError("이미지를 불러오지 못했습니다. 다른 파일을 선택해 주세요.");
+    reader.readAsDataURL(target);
+  }
 
   useEffect(() => {
     setImageSize(undefined);
@@ -235,7 +249,13 @@ export default function PetsImageCropDialog({
                   const size = cropAreaRef.current?.clientWidth;
                   if (size) setCropSize(size);
                 }}
-                onError={() => setError("이미지를 불러오지 못했습니다. 다른 파일을 선택해 주세요.")}
+                onError={() => {
+                  if (file && imageUrl?.startsWith("blob:")) {
+                    loadAsDataUrl(file);
+                    return;
+                  }
+                  setError("이미지를 불러오지 못했습니다. 다른 파일을 선택해 주세요.");
+                }}
                 className="pointer-events-none absolute max-w-none select-none"
                 style={{
                   left: imageLeft,

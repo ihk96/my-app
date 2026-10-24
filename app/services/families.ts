@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios";
 
 export default {
   getMyFamilies: async function(){
-    const res: AxiosResponse<z.infer<typeof FamiliesResponseData>[]> = await APIClient.get("/families/my?mode=empty");
+    const res: AxiosResponse<z.infer<typeof FamiliesResponseData>[]> = await APIClient.get("/families/my");
 
     return res;
   },

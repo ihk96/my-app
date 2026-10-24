@@ -46,15 +46,33 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
   const [cropOpen, setCropOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>();
 
+  // iOS Safari는 input 값을 비우면 선택한 파일의 임시 사본을 지울 수 있어서,
+  // 선택 직후가 아니라 다음 선택을 시작할 때 비운다.
+  const openFilePicker = () => {
+    const input = fileInputRef.current;
+    if (!input) return;
+    input.value = "";
+    input.click();
+  };
+
   useEffect(() => {
     if (!thumbnailFile) {
       setPreviewUrl(undefined);
       return;
     }
 
-    const url = URL.createObjectURL(thumbnailFile);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
+    // 배포 환경의 iOS Safari에서 blob URL 이미지가 표시되지 않아 data URL을 쓴다.
+    // 썸네일은 512px JPEG라 data URL로 들고 있어도 부담이 적다.
+    let cancelled = false;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (!cancelled && typeof reader.result === "string") setPreviewUrl(reader.result);
+    };
+    reader.readAsDataURL(thumbnailFile);
+    return () => {
+      cancelled = true;
+      reader.abort();
+    };
   }, [thumbnailFile]);
 
   return (
@@ -95,7 +113,7 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
                             <button
                               type="button"
                               aria-label="반려동물 사진 선택"
-                              onClick={() => fileInputRef.current?.click()}
+                              onClick={openFilePicker}
                             />
                         }
                       />
@@ -112,7 +130,6 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
                     if (!file) return;
                     update({ originalImage: file, thumbnailImage: undefined });
                     setCropOpen(true);
-                    event.target.value = "";
                   }}
                 />
               </div>
@@ -122,7 +139,7 @@ export default function PetsItemForm({ value: controlled, onChange }: PetsItemFo
                     <Crop />
                     썸네일 조정
                   </Button>
-                  <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                  <Button type="button" variant="outline" size="sm" onClick={openFilePicker}>
                     사진 변경
                   </Button>
                 </div>
