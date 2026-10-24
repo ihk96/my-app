@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios";
 
 export default {
   getMyFamilies: async function(){
-    const res: AxiosResponse<z.infer<typeof FamiliesResponseData>[]> = await APIClient.get("/families/my");
+    const res: AxiosResponse<z.infer<typeof FamiliesResponseData>[]> = await APIClient.get("/families/my?mode=empty");
 
     return res;
   },
@@ -98,7 +98,7 @@ export const FamiliesResponseData = z.object({
 });
 
 export const CreateFamilyRequestData = z.object({
-  name: z.string(),
+  family_name: z.string(),
   feature_pets: z.boolean(),
   feature_inventory: z.boolean(),
   feature_account_book: z.boolean(),

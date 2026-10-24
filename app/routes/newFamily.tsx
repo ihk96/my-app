@@ -71,92 +71,95 @@ export default function NewFamily() {
 
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-			<div className="flex w-full max-w-sm flex-col gap-6">
-				<a href="#" className="flex items-center gap-2 self-center font-medium">
-					<div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-						<img src="/icons/192.png"/>
-					</div>
-					Miyaku Org.
-				</a>
-        <div className={cn("flex flex-col gap-6")}>
-          <Carousel opts={{watchDrag: false}} setApi={setCarouselApi}>
-            <CarouselContent className="h-100">
-              <CarouselItem>
-                <Card>
-                  <CardHeader className="text-center">
-                    <CardTitle className="text-xl">가족에 가입하기</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
-                    <div>
-                      <p className="text-muted-foreground text-center">가족에 가입하거나 새 가족을 만드실 수 있습니다.</p>
-                      <p className="text-muted-foreground text-center">원하는 옵션을 선택해주세요.</p>
-                    </div>
-                    <Button className="w-full" onClick={() => navigate("#existing")}>기존 가족에 가입하기</Button>
-                    <Button variant="outline" className="w-full" onClick={() => navigate("#new")}>새 가족 만들기</Button>
+    <div className="fixed top-0 h-screen w-screen bg-black">
 
-                    <div className="flex items-center gap-2">
-                      <p className="text-muted-foreground">이미 가입 요청한 내역이 있나요?</p>
-                      <Button variant="ghost" onClick={() => navigate("#history")}>내역 보기</Button>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="ghost" className="text-destructive" onClick={() => navigate("#logout")}>로그아웃</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-              {isExisting && (<>
-                <CarouselItem>
-                  <JoinRequest api={carouselApi} />
-                </CarouselItem>
+      <div className="flex h-full flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+        <div className="flex w-full max-w-sm flex-col gap-6">
+          <a href="#" className="flex items-center gap-2 self-center font-medium">
+            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <img src="/icons/192.png"/>
+            </div>
+            Miyaku Org.
+          </a>
+          <div className={cn("flex flex-col gap-6")}>
+            <Carousel opts={{watchDrag: false}} setApi={setCarouselApi}>
+              <CarouselContent className="h-100">
                 <CarouselItem>
                   <Card>
                     <CardHeader className="text-center">
-                      <CardTitle className="text-xl">가입 요청 완료</CardTitle>
+                      <CardTitle className="text-xl">가족에 가입하기</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4">
                       <div>
-                        <p className="text-muted-foreground text-center">가입 요청이 완료되었습니다.</p>
-                        <p className="text-muted-foreground text-center">가족 관리자가 확인하여 가입 여부를 결정합니다.</p>
-                        <p className="text-muted-foreground text-center">가입이 승인될 때까지 기다려주세요.</p>
+                        <p className="text-muted-foreground text-center">가족에 가입하거나 새 가족을 만드실 수 있습니다.</p>
+                        <p className="text-muted-foreground text-center">원하는 옵션을 선택해주세요.</p>
                       </div>
-                      <Button className="w-full" onClick={()=>{navigate("#history")}}>요청 내역 보기</Button>
-                      <Button variant="ghost" className="w-full" onClick={()=>{navigate("#");}}>처음으로</Button>
+                      <Button className="w-full" onClick={() => navigate("#existing")}>기존 가족에 가입하기</Button>
+                      <Button variant="outline" className="w-full" onClick={() => navigate("#new")}>새 가족 만들기</Button>
+
+                      <div className="flex items-center gap-2">
+                        <p className="text-muted-foreground">이미 가입 요청한 내역이 있나요?</p>
+                        <Button variant="ghost" onClick={() => navigate("#history")}>내역 보기</Button>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="ghost" className="text-destructive" onClick={() => navigate("#logout")}>로그아웃</Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </CarouselItem>
-                <CarouselItem>
-                  <JoinRequestHistory api={carouselApi} />
-                </CarouselItem>
-              </>)}
-              {isNew && (<>
-                <CreateFamily api={carouselApi}/>
-                <CarouselItem>
-                  <Card>
-                    <CardHeader className="text-center">
-                      <CardTitle className="text-xl">새 가족 만들기 완료</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-4">
-                      <div>
-                        <p className="text-muted-foreground text-center">새 가족 만들기가 완료되었습니다.</p>
-                        <p className="text-muted-foreground text-center">이제 생성하신 가족의 일원으로 활동하실 수 있습니다.</p>
-                      </div>
-                      <Button className="w-full" onClick={()=>{navigate("/app")}}>시작하기</Button>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              </>)}
-              {isHistory && (
-                <CarouselItem>
-                  <JoinRequestHistory api={carouselApi} />
-                </CarouselItem>
-              )}
-            </CarouselContent>
-          </Carousel>
-          
+                {isExisting && (<>
+                  <CarouselItem>
+                    <JoinRequest api={carouselApi} />
+                  </CarouselItem>
+                  <CarouselItem>
+                    <Card>
+                      <CardHeader className="text-center">
+                        <CardTitle className="text-xl">가입 요청 완료</CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex flex-col gap-4">
+                        <div>
+                          <p className="text-muted-foreground text-center">가입 요청이 완료되었습니다.</p>
+                          <p className="text-muted-foreground text-center">가족 관리자가 확인하여 가입 여부를 결정합니다.</p>
+                          <p className="text-muted-foreground text-center">가입이 승인될 때까지 기다려주세요.</p>
+                        </div>
+                        <Button className="w-full" onClick={()=>{navigate("#history")}}>요청 내역 보기</Button>
+                        <Button variant="ghost" className="w-full" onClick={()=>{navigate("#");}}>처음으로</Button>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                  <CarouselItem>
+                    <JoinRequestHistory api={carouselApi} />
+                  </CarouselItem>
+                </>)}
+                {isNew && (<>
+                  <CreateFamily api={carouselApi}/>
+                  <CarouselItem>
+                    <Card>
+                      <CardHeader className="text-center">
+                        <CardTitle className="text-xl">새 가족 만들기 완료</CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex flex-col gap-4">
+                        <div>
+                          <p className="text-muted-foreground text-center">새 가족 만들기가 완료되었습니다.</p>
+                          <p className="text-muted-foreground text-center">이제 생성하신 가족의 일원으로 활동하실 수 있습니다.</p>
+                        </div>
+                        <Button className="w-full" onClick={()=>{navigate("/app")}}>시작하기</Button>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                </>)}
+                {isHistory && (
+                  <CarouselItem>
+                    <JoinRequestHistory api={carouselApi} />
+                  </CarouselItem>
+                )}
+              </CarouselContent>
+            </Carousel>
+            
+          </div>
         </div>
-			</div>
-		</div>
+      </div>
+    </div>
   );
 }
 
@@ -179,7 +182,7 @@ function CreateFamily({api}: {api: CarouselApi}) {
       return;
     }
     families.createFamily({
-      name: familyName,
+      family_name: familyName,
       feature_account_book: features.householdAccountBook,
       feature_inventory: features.inventoryManagement,
       feature_pets: features.petManagement

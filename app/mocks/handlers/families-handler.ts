@@ -81,7 +81,7 @@ export const familiesHandler = [
     const newFamily : z.infer<typeof FamiliesResponseData> = {
       // TODO: 초기값 설정
       id: uuidv4().toString(),
-      name: body.name,
+      name: body.family_name,
       creator_id: uuidv4().toString(),
       invitation_code: uuidv4().toString().substring(0,6),
       feature_account_book: body.feature_account_book,
