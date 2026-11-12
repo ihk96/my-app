@@ -6,7 +6,10 @@ export const APIClient = (()=>{
   const axiosInstance = axios.create({
     // @ts-ignore
     baseURL : "/api",
-    withCredentials : true
+    withCredentials : true,
+    headers: {
+      "X-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+    }
   });
   axiosInstance.interceptors.response.use(response=>{
     return response;
