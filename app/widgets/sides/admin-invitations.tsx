@@ -4,7 +4,7 @@ import z from "zod/v4";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { useLocation } from "react-router";
-import { Panel, RowGroup, SectionTitle } from "../screen";
+import { Panel, RowGroup, SectionTitle } from "~/components/app/screen";
 import { Card, CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";

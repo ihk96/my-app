@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Fi from "zod/v4/locales/fi.cjs";
 
 import {
@@ -12,19 +12,22 @@ import {
   SectionTitle,
   StatTile,
 } from "~/components/app/screen";
-import CareSidePage from "~/components/app/sides/care-side";
-import { CareLogDrawer } from "~/components/app/sides/care-log-form";
+import CareSidePage from "~/widgets/sides/care-side";
+import { CareLogDrawer } from "~/widgets/sides/care-log-form";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import PetsItemForm from "~/components/app/sides/pets-item-form";
-
-const PETS = ["도봉이", "꼬미", "도봉", "도봉", "도봉", "도봉", "도봉","꼬꼬미"];
-
-const WEIGHT_SERIES = [48.3, 49.1, 50.0, 50.6, 51.7, 52.4];
+import PetsItemForm from "~/widgets/sides/pets-item-form";
+import type { Route } from "./+types";
+import { useAppState } from "~/stores/app-state";
+import pets, { TodayPetCareItemResponseData } from "~/services/pets";
+import { redirect } from "react-router";
+import { z } from "zod/v4";
+import { PetDetail } from "~/widgets/pets/pet-detail-card";
+import { sameDay } from "~/lib/date-utils";
 
 const CARE_LOG = [
   {
@@ -53,7 +56,50 @@ const CARE_LOG = [
   },
 ];
 
-export default function PetsHome() {
+export async function clientLoader({}: Route.ClientLoaderArgs) {
+  const {family} = useAppState.getState();
+  if(!family){
+    return redirect("/app");
+  }
+
+  const petsList = await pets.getFamilyPets(family.id).then(res => res.data);
+  const todayCareItems = await pets.getFamilyTodayCareItems(family.id).then(res => res.data);
+
+  return {
+    petsList,
+    todayCareItems
+  }
+}
+
+function careRowDescription(item: z.infer<typeof TodayPetCareItemResponseData>) {
+  let description = "";
+
+  description += item.cycle_type === "Anytime" ? "수시" : "주기";
+
+  let lastDate = item.last_care_at ? new Date(item.last_care_at) : undefined;
+
+  if(item.cycle_type === "Regular") {
+    if(item.interval && item.interval_type) {
+      description += ` · ${item.interval}${item.interval_type === "AfterDays" ? "일" : item.interval_type === "Weeks" ? "주" : "개월"}`;
+    }
+  }
+  
+  if(lastDate) {
+    if(sameDay(lastDate, new Date())) {
+      description += " · [마지막] 오늘 " + lastDate.toTimeString().substring(0,5);
+    } else {
+      description += " · [마지막] " + lastDate.toLocaleDateString().substring(2,12).replaceAll(' ','');
+    }
+  }
+
+  return description;
+}
+
+export default function PetsHome({loaderData}:Route.ComponentProps) {
+  const { petsList, todayCareItems } = loaderData
+
+  const [selectedPet, setSelectedPet] = useState([petsList[0]?.id]);
+
   return (
     <Screen>
       <ScreenHeader
@@ -68,24 +114,32 @@ export default function PetsHome() {
 
       <div className="flex flex-col gap-1">
         <SectionTitle
-          aside={
-            <DrawerPage
-              trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
-              title="돌봄 기록"
-            // description="전체 돌봄 기록을 확인하세요"
-            >
-              <CareSidePage />
-            </DrawerPage>
+          // aside={
+          //   <DrawerPage
+          //     trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
+          //     title="돌봄 기록"
+          //   // description="전체 돌봄 기록을 확인하세요"
+          //   >
+          //     <CareSidePage />
+          //   </DrawerPage>
 
-          }
+          // }
         >
-          돌봄 기록
+          오늘의 돌봄 항목
         </SectionTitle>
         <Panel>
           <CardContent className="flex flex-col gap-3">
             <RowGroup>
-              {CARE_LOG.map((entry) => (
-                <CareLogRow key={entry.title} entry={entry} />
+              {todayCareItems.map((item) => (
+                <CareLogRow key={item.id} entry={{
+                  media: item.emoji,
+                  title: item.name,
+                  description: careRowDescription(item),
+                  badge: {
+                    className: "bg-warning-muted text-warning",
+                    label: "대기"
+                  },
+                }} />
               ))}
             </RowGroup>
           </CardContent>
@@ -107,14 +161,19 @@ export default function PetsHome() {
         </SectionTitle>
         <div className="flex justify-between gap-2">
           <ScrollArea className={"w-full"}>
-            <ToggleGroup variant={"outline"}>
-              {PETS.map((pet) => (
+            <ToggleGroup variant={"outline"} value={selectedPet} onValueChange={(v)=>{ setSelectedPet(v) }} >
+              {petsList.map(pet => (
                 <ToggleGroupItem
                   className="data-pressed:bg-primary data-pressed:text-primary-foreground"
-                  key={pet}
-                  value={pet}
+                  key={pet.id}
+                  value={pet.id}
+                  onPressedChange={(p,e)=>{
+                    if(!p){
+                      e.cancel();
+                    }
+                  }}
                 >
-                  {pet}
+                  {pet.name}
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -123,23 +182,7 @@ export default function PetsHome() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground">
-        <div className="flex size-13 shrink-0 items-center justify-center rounded-xl bg-card text-2xl">
-          🦎
-        </div>
-        <div className="min-w-0">
-          <p className="font-heading text-base font-semibold">도봉이</p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-            도마뱀 · 수컷
-          </p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-             🎂2년 4개월 · 🏠2년 4개월
-          </p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-            크레스티드 게코 · 트익할
-          </p>
-        </div>
-      </div>
+      <PetDetail pet_id={selectedPet[0]} />
 
       {/* <Panel>
         <CardContent className="flex flex-col gap-3">

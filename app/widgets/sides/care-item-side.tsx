@@ -1,5 +1,5 @@
 import { CardContent } from "~/components/ui/card";
-import { Panel, Row, RowGroup, SectionTitle } from "../screen";
+import { Panel, Row, RowGroup, SectionTitle } from "~/components/app/screen";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";

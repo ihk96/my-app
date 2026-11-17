@@ -10,7 +10,7 @@ import {
 	SectionTitle,
 	StatTile,
 } from "~/components/app/screen";
-import Profile from "~/components/app/sides/profile";
+import Profile from "~/widgets/sides/profile";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { CardContent } from "~/components/ui/card";

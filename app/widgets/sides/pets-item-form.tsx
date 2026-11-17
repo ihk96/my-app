@@ -3,7 +3,7 @@ import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Button } from "~/components/ui/button";
-import { Panel } from "../screen";
+import { Panel } from "~/components/app/screen";
 import { CardContent } from "~/components/ui/card";
 import { Attachment, AttachmentAction, AttachmentActions, AttachmentMedia, AttachmentTrigger } from "~/components/ui/attachment";
 import { Crop, XIcon } from "lucide-react";

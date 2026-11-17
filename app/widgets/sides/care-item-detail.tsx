@@ -9,7 +9,7 @@ import { ko } from "date-fns/locale";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { Panel, Row, RowGroup, SectionTitle, StatTile } from "../screen";
+import { Panel, Row, RowGroup, SectionTitle, StatTile } from "~/components/app/screen";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";

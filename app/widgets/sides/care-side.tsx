@@ -1,7 +1,7 @@
 import { format, subDays } from "date-fns";
 import { useState } from "react";
 
-import { Panel, Row, RowGroup, SectionTitle } from "../screen";
+import { Panel, Row, RowGroup, SectionTitle } from "~/components/app/screen";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { CardContent } from "~/components/ui/card";
