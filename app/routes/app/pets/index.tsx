@@ -1,5 +1,5 @@
-import { Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Pencil, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import Fi from "zod/v4/locales/fi.cjs";
 
 import {
@@ -23,11 +23,15 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import PetsItemForm from "~/widgets/sides/pets-item-form";
 import type { Route } from "./+types";
 import { useAppState } from "~/stores/app-state";
-import pets, { TodayPetCareItemResponseData } from "~/services/pets";
+import pets, { PetCareItemResponseData, TodayPetCareItemResponseData } from "~/services/pets";
 import { redirect } from "react-router";
 import { z } from "zod/v4";
-import { PetDetail } from "~/widgets/pets/pet-detail-card";
+import { PetDetailCard } from "~/widgets/pets/pet-detail-card";
 import { sameDay } from "~/lib/date-utils";
+import CareItemSidePage from "~/widgets/sides/care-item-side";
+import CareItemDetailPage from "~/widgets/sides/care-item-detail";
+import { CareItemRowForLog } from "~/widgets/pets/pet-care-item-row";
+import PetDetailSidePage from "~/widgets/sides/pet-detail-side";
 
 const CARE_LOG = [
   {
@@ -71,7 +75,12 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
   }
 }
 
-function careRowDescription(item: z.infer<typeof TodayPetCareItemResponseData>) {
+function careRowDescription(item: {
+  cycle_type: string;
+  last_care_at?: string;
+  interval?: number;
+  interval_type?: string;
+}) {
   let description = "";
 
   description += item.cycle_type === "Anytime" ? "수시" : "주기";
@@ -97,49 +106,41 @@ function careRowDescription(item: z.infer<typeof TodayPetCareItemResponseData>) 
 
 export default function PetsHome({loaderData}:Route.ComponentProps) {
   const { petsList, todayCareItems } = loaderData
-
-  const [selectedPet, setSelectedPet] = useState([petsList[0]?.id]);
+  const [open, setOpen] = useState(false);
+  const [selectedPetIds, setSelectedPetIds] = useState([petsList[0]?.id]);
+  const selectedPet = useMemo(() => {
+    if(selectedPetIds.length == 0) {
+      return undefined;
+    }
+    return petsList.find(pet => pet.id === selectedPetIds[0]);
+  }, [selectedPetIds]);
 
   return (
     <Screen>
       <ScreenHeader
         title="반려동물"
-      // subtitle="2마리 · 오늘 할 일 2"
-      // action={
-      // 	<Button size="icon-sm" variant="secondary" aria-label="반려동물 추가">
-      // 		<Plus />
-      // 	</Button>
-      // }
+        subtitle={`${petsList.length}마리 · 오늘 할 일 ${todayCareItems.length}`}
       />
 
       <div className="flex flex-col gap-1">
-        <SectionTitle
-          // aside={
-          //   <DrawerPage
-          //     trigger={<Button size={"xs"} variant={"ghost"}>전체</Button>}
-          //     title="돌봄 기록"
-          //   // description="전체 돌봄 기록을 확인하세요"
-          //   >
-          //     <CareSidePage />
-          //   </DrawerPage>
-
-          // }
-        >
+        <SectionTitle>
           오늘의 돌봄 항목
         </SectionTitle>
         <Panel>
           <CardContent className="flex flex-col gap-3">
             <RowGroup>
               {todayCareItems.map((item) => (
-                <CareLogRow key={item.id} entry={{
-                  media: item.emoji,
-                  title: item.name,
-                  description: careRowDescription(item),
-                  badge: {
-                    className: "bg-warning-muted text-warning",
-                    label: "대기"
-                  },
-                }} />
+                <CareItemRowForLog key={item.id} 
+                                   item={{
+                                     media: item.emoji,
+                                     title: item.name,
+                                     description: careRowDescription(item),
+                                     badge: {
+                                       className: "bg-warning-muted text-warning",
+                                       label: "대기"
+                                     },
+                                   }} 
+                />
               ))}
             </RowGroup>
           </CardContent>
@@ -161,7 +162,7 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
         </SectionTitle>
         <div className="flex justify-between gap-2">
           <ScrollArea className={"w-full"}>
-            <ToggleGroup variant={"outline"} value={selectedPet} onValueChange={(v)=>{ setSelectedPet(v) }} >
+            <ToggleGroup variant={"outline"} value={selectedPetIds} onValueChange={(v)=>{ setSelectedPetIds(v) }} >
               {petsList.map(pet => (
                 <ToggleGroupItem
                   className="data-pressed:bg-primary data-pressed:text-primary-foreground"
@@ -181,91 +182,32 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
           </ScrollArea>
         </div>
       </div>
-
-      <PetDetail pet_id={selectedPet[0]} />
-
-      {/* <Panel>
-        <CardContent className="flex flex-col gap-3">
-          <SectionTitle aside="최근 6주">체중</SectionTitle>
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-3xl font-semibold tracking-tight tabular-nums">
-                52.4
-                <span className="ml-1 text-sm font-medium">g</span>
-              </p>
-              <p className="mt-1 text-xs font-medium text-success tabular-nums">
-                6주간 +4.1 g
-              </p>
-            </div>
-            <WeightSparkline series={WEIGHT_SERIES} />
-          </div>
-        </CardContent>
-      </Panel> */}
+      {selectedPet && (
+        <>
+          <PetDetailCard pet_id={selectedPet?.id} onClick={()=>{setOpen(true)}}/>
+          <DrawerPage
+              open={open}
+              onOpenChange={setOpen}
+              title={selectedPet?.name}
+              action={(
+                <DrawerPage
+                  trigger={
+                    <Button variant="secondary" size="icon-sm">
+                      <Pencil />
+                    </Button>
+                  }
+                  title="반려동물 수정"
+                  description={`${selectedPet?.name} 항목을 수정합니다.`}
+                >
+                  
+                </DrawerPage>
+              )}
+            >
+              <PetDetailSidePage pet_id={selectedPet?.id} />
+          </DrawerPage>
+        </>
+      )}
 
     </Screen>
-  );
-}
-
-/** 돌봄 기록 한 줄. 시트 열림 상태를 줄마다 따로 들어야 해서 컴포넌트로 분리한다. */
-function CareLogRow({ entry }: { entry: (typeof CARE_LOG)[number] }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <Row
-        onClick={() => setOpen(true)}
-        media={entry.media}
-        title={entry.title}
-        description={entry.description}
-        trailing={
-          <Badge className={entry.badge.className}>{entry.badge.label}</Badge>
-        }
-      />
-      <CareLogDrawer
-        title={`돌봄 기록 · ${entry.title}`}
-        description={entry.description}
-        open={open}
-        onOpenChange={setOpen}
-      />
-    </>
-  );
-}
-
-/** 최근 6주 체중을 한 줄로 보여주는 스파크라인. 끝점만 강조한다. */
-function WeightSparkline({ series }: { series: number[] }) {
-  const width = 128;
-  const height = 52;
-  const padding = 6;
-  const min = Math.min(...series);
-  const max = Math.max(...series);
-  const span = max - min || 1;
-
-  const points = series.map((value, index) => {
-    const x = padding + (index * (width - padding * 2)) / (series.length - 1);
-    const y = height - padding - ((value - min) / span) * (height - padding * 2);
-    return [x, y] as const;
-  });
-
-  const last = points[points.length - 1];
-
-  return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      role="img"
-      aria-label={`체중 추이 ${min}g에서 ${max}g`}
-      className="shrink-0"
-    >
-      <polyline
-        points={points.map(([x, y]) => `${x},${y}`).join(" ")}
-        fill="none"
-        stroke="var(--primary)"
-        strokeWidth={2.2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx={last[0]} cy={last[1]} r={3.4} fill="var(--primary)" />
-    </svg>
   );
 }

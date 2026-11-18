@@ -8,6 +8,8 @@ import { Badge } from "~/components/ui/badge";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Button } from "~/components/ui/button";
 import { Toggle } from "~/components/ui/toggle";
+import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "~/components/ui/popover";
+import { AMIMALS_AND_NATURES, FOOD_AND_DRINKS } from "~/lib/emojis";
 
 const PETS = ["도봉이", "꼬미","도봉일","도봉삼","도봉사","도봉오","도봉육"];
 
@@ -25,6 +27,7 @@ export type RecurrenceRule = {
 };
 
 export type CareItemFormValue = {
+  emoji: string;
   name: string;
   /** asNeeded: 수시, recurring: 주기 */
   type: "asNeeded" | "recurring";
@@ -69,6 +72,7 @@ function startOfWeek(date: Date) {
 }
 
 const defaultValue: CareItemFormValue = {
+  emoji: "",
   name: "",
   type: "asNeeded",
   recurrence: {
@@ -148,8 +152,7 @@ type CareItemFormProps = {
 export default function CareItemForm({ value: controlled, onChange }: CareItemFormProps) {
   const [internal, setInternal] = useState<CareItemFormValue>(controlled ?? defaultValue);
   const value = controlled ?? internal;
-  const [allSelected, setAllSelected] = useState(false);
-  const [selectedPets, setSelectedPets] = useState<string[]>([]);
+  const [emojiOpen, setEmojiOpen] = useState(false);
 
   const update = (patch: Partial<CareItemFormValue>) => {
     const next = { ...value, ...patch };
@@ -195,6 +198,39 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
   return (
     <FieldGroup>
       <Field>
+        <FieldLabel >이모지</FieldLabel>
+        <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
+          <PopoverTrigger render={
+            <div className="size-10! flex items-center justify-center border rounded-md text-3xl">
+              {value.emoji}
+            </div>
+          } />
+          <PopoverContent align="start" className="w-[calc(100vw-4rem)]">
+            <PopoverHeader>
+              <PopoverTitle>이모지 선택</PopoverTitle>
+              <PopoverDescription>
+              </PopoverDescription>
+            </PopoverHeader>
+            <ScrollArea className="h-60">
+              <div className="flex flex-col gap-4">
+                <div>
+                  <p className="font-semibold text-muted-foreground">동물 및 자연</p>
+                  {AMIMALS_AND_NATURES.map((emoji) => (
+                    <span key={emoji} className="text-2xl" onClick={() => {update({ emoji }); setEmojiOpen(false);}} >{emoji}</span>
+                  ))}
+                </div>
+                <div>
+                  <p className="font-semibold text-muted-foreground">음식 및 음료</p>
+                  {FOOD_AND_DRINKS.map((emoji) => (
+                    <span key={emoji} className="text-2xl" onClick={() => {update({ emoji }); setEmojiOpen(false);}}>{emoji}</span>
+                  ))}
+                </div>
+              </div>
+            </ScrollArea>
+          </PopoverContent>
+        </Popover>
+      </Field>
+      <Field>
         <FieldLabel htmlFor="care-item-name">항목 이름</FieldLabel>
         <Input
           id="care-item-name"
@@ -204,42 +240,6 @@ export default function CareItemForm({ value: controlled, onChange }: CareItemFo
           placeholder="예) 산책, 발톱 깎기"
         />
       </Field>
-      <Field>
-        <FieldLabel>대상 반려동물
-          <Toggle
-            variant="outline"
-            size="sm"
-            pressed={allSelected}
-            onPressedChange={(b) => {
-              setAllSelected(b);
-              if(b){
-                setSelectedPets([...PETS]);
-              } else {
-                setSelectedPets([]);
-              }
-            }}
-          >
-            {allSelected && "전체 해제"}
-            {!allSelected && "전체 선택"}
-          </Toggle>
-        </FieldLabel>
-        <ScrollArea className={"flex-1 min-w-0"}>
-          <div className="flex gap-2">
-            <ToggleGroup variant={"outline"} multiple value={selectedPets} onValueChange={v=>{setSelectedPets(v); if(v.length === PETS.length){setAllSelected(true);} else {setAllSelected(false);}}}>
-              {PETS.map((pet) => (
-                <ToggleGroupItem
-                  key={pet}
-                  value={pet}
-                >
-                  {pet}
-                </ToggleGroupItem>
-              ))}
-          </ToggleGroup>
-          </div>
-          <ScrollBar className={"-bottom-2.5! absolute border-t-4!"} orientation="horizontal" />
-        </ScrollArea>
-      </Field>
-
       <Field>
         <FieldLabel>유형</FieldLabel>
         <ToggleGroup

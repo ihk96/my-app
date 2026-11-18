@@ -2,6 +2,10 @@ import { z } from "zod/v4";
 import { dateYearMonthGap } from "~/lib/date-utils";
 import { useEffect, useState } from "react";
 import pets from "~/services/pets";
+import { ChevronRight, Pencil } from "lucide-react";
+import { DrawerPage } from "~/components/ui/drawer-page";
+import { Button } from "~/components/ui/button";
+import PetDetailSidePage from "../sides/pet-detail-side";
 
 const PetDetailSchema = z.object({
     id: z.string(),
@@ -14,10 +18,12 @@ const PetDetailSchema = z.object({
 });
 export type PetDetail = z.infer<typeof PetDetailSchema>;
 
-export function PetDetail({
-  pet_id
+export function PetDetailCard({
+  pet_id,
+  onClick,
 }: {
   pet_id: string
+  onClick?: () => void;
 }) {
   const [pet, setPet] = useState<PetDetail | undefined>(undefined);
   const [additionalInfos, setAdditionalInfos] = useState<string[]>([]);
@@ -43,36 +49,49 @@ export function PetDetail({
   }, [pet_id]);
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground">
-      {!pet && <p>Loading...</p>}
-      {pet && (<>
+    <>
+      <div className="flex items-center gap-3 rounded-2xl bg-accent px-4 py-3.5 text-accent-foreground"
+          onClick={()=>{
+            if(onClick) {
+              onClick();
+            }
+          }}
+      >
+        {!pet && <p>Loading...</p>}
+        {pet && (<>
 
-        <div className="flex size-13 shrink-0 items-center justify-center rounded-xl bg-card text-2xl">
-          {pet.thumbnail ? (
-            <img src={pet.thumbnail} alt={pet.name} className="w-full h-full object-cover rounded-xl" />
-          ) : (
-            ""
+          <div className="flex size-13 shrink-0 items-center justify-center rounded-xl bg-card text-2xl">
+            {pet.thumbnail ? (
+              <img src={pet.thumbnail} alt={pet.name} className="w-full h-full object-cover rounded-xl" />
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-heading text-base font-semibold">{pet.name}</p>
+            <p className="mt-0.5 truncate text-xs opacity-80">
+              {PetSpeciesName(pet.species)} · {pet.sex === "Male" ? "수컷" : pet.sex === "Female" ? "암컷" : "알수없음"}
+            </p>
+            <p className="mt-0.5 truncate text-xs opacity-80">
+                🎂{dateYearMonthGap(new Date(pet.birth_date), new Date()).years}년 {dateYearMonthGap(new Date(pet.birth_date), new Date()).months}개월
+                · 🏠{dateYearMonthGap(new Date(pet.day_became_family), new Date()).years}년 {dateYearMonthGap(new Date(pet.day_became_family), new Date()).months}개월
+            </p>
+            <p className="mt-0.5 truncate text-xs opacity-80">
+              {additionalInfos.map((info, index) => (<>
+                <span key={index}>{info}</span>
+                {index < additionalInfos.length - 1 ? <span className="mx-1">·</span> : ""}
+              </>))}
+            </p>
+          </div>
+          {onClick && (
+            <div className="w-5">
+              <ChevronRight className="opacity-50" />
+            </div>
           )}
-        </div>
-        <div className="min-w-0">
-          <p className="font-heading text-base font-semibold">{pet.name}</p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-            {PetSpeciesName(pet.species)} · {pet.sex === "Male" ? "수컷" : pet.sex === "Female" ? "암컷" : "알수없음"}
-          </p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-              🎂{dateYearMonthGap(new Date(pet.birth_date), new Date()).years}년 {dateYearMonthGap(new Date(pet.birth_date), new Date()).months}개월
-              · 🏠{dateYearMonthGap(new Date(pet.day_became_family), new Date()).years}년 {dateYearMonthGap(new Date(pet.day_became_family), new Date()).months}개월
-          </p>
-          <p className="mt-0.5 truncate text-xs opacity-80">
-            {additionalInfos.map((info, index) => (<>
-              <span key={index}>{info}</span>
-              {index < additionalInfos.length - 1 ? <span className="mx-1">·</span> : ""}
-            </>))}
-          </p>
-        </div>
 
-      </>)}
-    </div>
+        </>)}
+      </div>
+    </>
   )
 }
 

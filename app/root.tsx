@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <Toaster/>
+        <Toaster timeout={2000}/>
         <ScrollRestoration />
         <Scripts />
       </body>
