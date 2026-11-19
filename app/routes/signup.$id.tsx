@@ -8,7 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { toast } from "~/components/ui/toast";
 import { cn } from "~/lib/utils";
-import users, { UserInvitationResponseData } from "~/services/users";
+import users, { UserInvitationResponseData } from "~/lib/api/users";
 import type { Route } from "./+types/signup.$id";
 import z from "zod/v4";
 

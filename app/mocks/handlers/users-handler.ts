@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import type { z } from "zod";
-import { UserInvitationResponseData, UserInvitationSignupRequestData, UserResponseData } from "~/services/users";
+import { UserInvitationResponseData, UserInvitationSignupRequestData, UserResponseData } from "~/lib/api/users";
 
 export const usersHandler = [
   http.get("/api/users/me", ()=>{

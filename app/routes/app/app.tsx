@@ -5,12 +5,12 @@ import type { z } from "zod/v4";
 import { useMemo } from "react";
 
 import { cn } from "~/lib/utils";
-import users from "~/services/users";
+import users from "~/lib/api/users";
 import { useEffect } from "react";
 import { FamilyData, useAppState } from "~/stores/app-state";
 import { Spinner } from "~/components/ui/spinner";
 import type { Route } from "./+types/app";
-import families from "~/services/families";
+import families from "~/lib/api/families";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const user = await users.me()

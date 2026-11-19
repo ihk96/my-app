@@ -1,64 +1,28 @@
-import { Pencil, Plus } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import Fi from "zod/v4/locales/fi.cjs";
+import { useMemo, useState } from "react";
 
 import {
-  Meter,
-  Row,
   RowGroup,
   Screen,
   ScreenHeader,
   Panel,
   SectionTitle,
-  StatTile,
 } from "~/components/app/screen";
-import CareSidePage from "~/widgets/sides/care-side";
-import { CareLogDrawer } from "~/widgets/sides/care-log-form";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import PetsItemForm from "~/widgets/sides/pets-item-form";
+import PetsItemForm from "~/widgets/pets/pets-item-form";
 import type { Route } from "./+types";
 import { useAppState } from "~/stores/app-state";
-import pets, { PetCareItemResponseData, TodayPetCareItemResponseData } from "~/services/pets";
-import { redirect } from "react-router";
+import pets from "~/lib/api/pets";
+import { redirect, useRevalidator } from "react-router";
 import { z } from "zod/v4";
 import { PetDetailCard } from "~/widgets/pets/pet-detail-card";
 import { sameDay } from "~/lib/date-utils";
-import CareItemSidePage from "~/widgets/sides/care-item-side";
-import CareItemDetailPage from "~/widgets/sides/care-item-detail";
 import { CareItemRowForLog } from "~/widgets/pets/pet-care-item-row";
 import PetDetailSidePage from "~/widgets/sides/pet-detail-side";
-
-const CARE_LOG = [
-  {
-    media: "🦗",
-    title: "급여",
-    description: "오늘 예정 · 격일",
-    badge: { label: "대기", className: "bg-warning-muted text-warning" },
-  },
-  {
-    media: "💧",
-    title: "분무",
-    description: "수시  · [마지막] 오늘 07:20",
-    badge: { label: "기록", className: "bg-success-muted text-success" },
-  },
-  {
-    media: "🍂",
-    title: "탈피",
-    description: "수시 · [마지막] 25.09.01",
-    badge: { label: "기록", className: "bg-muted text-muted-foreground" },
-  },
-  {
-    media: "🧹​",
-    title: "청소",
-    description: "수시 · [마지막] 어제 20:37",
-    badge: { label: "기록", className: "bg-muted text-muted-foreground" },
-  },
-];
+import PetCreateSidePage from "~/widgets/sides/pet-create-side";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const {family} = useAppState.getState();
@@ -71,7 +35,8 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
 
   return {
     petsList,
-    todayCareItems
+    todayCareItems,
+    family
   }
 }
 
@@ -105,15 +70,18 @@ function careRowDescription(item: {
 }
 
 export default function PetsHome({loaderData}:Route.ComponentProps) {
-  const { petsList, todayCareItems } = loaderData
+  const { petsList, todayCareItems, family } = loaderData
   const [open, setOpen] = useState(false);
+  const [createSideOpen, setCreateSideOpen] = useState(false);
   const [selectedPetIds, setSelectedPetIds] = useState([petsList[0]?.id]);
   const selectedPet = useMemo(() => {
     if(selectedPetIds.length == 0) {
       return undefined;
     }
     return petsList.find(pet => pet.id === selectedPetIds[0]);
-  }, [selectedPetIds]);
+  }, [selectedPetIds, petsList]);
+
+  const revalidator = useRevalidator();
 
   return (
     <Screen>
@@ -132,6 +100,7 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
               {todayCareItems.map((item) => (
                 <CareItemRowForLog key={item.id} 
                                    item={{
+                                     id: item.id,
                                      media: item.emoji,
                                      title: item.name,
                                      description: careRowDescription(item),
@@ -150,12 +119,17 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
       <div className="flex flex-col gap-1">
         <SectionTitle
           aside={
-            <DrawerPage
-              trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
-              title="반려 동물 추가"
-            >
-              <PetsItemForm />
-            </DrawerPage>
+            <>
+              <Button size={"xs"} variant={"ghost"} onClick={() => setCreateSideOpen(true)}>추가</Button>
+              <PetCreateSidePage familyId={family.id} 
+                                open={createSideOpen} 
+                                onChangeOpen={setCreateSideOpen}
+                                onSave={() => {
+                                  setCreateSideOpen(false);
+                                  revalidator.revalidate();
+                                }}
+              />
+            </>
           }
         >
           반려 동물
@@ -184,27 +158,18 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
       </div>
       {selectedPet && (
         <>
-          <PetDetailCard pet_id={selectedPet?.id} onClick={()=>{setOpen(true)}}/>
-          <DrawerPage
-              open={open}
-              onOpenChange={setOpen}
-              title={selectedPet?.name}
-              action={(
-                <DrawerPage
-                  trigger={
-                    <Button variant="secondary" size="icon-sm">
-                      <Pencil />
-                    </Button>
-                  }
-                  title="반려동물 수정"
-                  description={`${selectedPet?.name} 항목을 수정합니다.`}
-                >
-                  
-                </DrawerPage>
-              )}
-            >
-              <PetDetailSidePage pet_id={selectedPet?.id} />
-          </DrawerPage>
+          <PetDetailCard pet={selectedPet} 
+                         onClick={()=>{setOpen(true)}}
+          />
+          <PetDetailSidePage pet_id={selectedPet?.id} 
+                              open={open}
+                              onChangeOpen={open => {
+                                setOpen(open);
+                                if(!open){
+                                  revalidator.revalidate();
+                                }
+                              }}
+          />
         </>
       )}
 

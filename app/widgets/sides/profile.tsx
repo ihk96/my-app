@@ -3,7 +3,7 @@ import type { z } from "zod/v4";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/components/ui/dialog";
 import { DrawerPage } from "~/components/ui/drawer-page";
-import families, { FamiliesResponseData } from "~/services/families";
+import families, { FamiliesResponseData } from "~/lib/api/families";
 import { useAppState } from "~/stores/app-state";
 import AdminInvitations from "./admin-invitations";
 

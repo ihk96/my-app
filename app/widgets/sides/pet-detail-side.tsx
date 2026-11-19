@@ -1,54 +1,123 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Panel, SectionTitle } from "~/components/app/screen";
 import { CardContent } from "~/components/ui/card";
-import pets, { CreatePetCareItemRequestData } from "~/services/pets";
+import pets, { CreatePetCareItemRequestData, PetCareItemResponseData, PetResponseData } from "~/lib/api/pets";
 import { PetDetailCard } from "../pets/pet-detail-card";
 import { PetCareItemList } from "../pets/pet-care-list";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { Button } from "~/components/ui/button";
-import CareItemForm, { type CareItemFormValue } from "./care-item-form";
+import CareItemForm, { type CareItemFormValue } from "../pets/care-item-form";
 import type { z } from "zod/v4";
 import { DrawerClose } from "~/components/ui/drawer";
 import { toast } from "~/components/ui/toast";
+import { useRevalidator } from "react-router";
+import { weekdayNumberToString } from "~/lib/date-utils";
+import PetUpdateSidePage from "./pet-update-side";
+import { Pencil } from "lucide-react";
 
 export default function PetDetailSidePage({
-  pet_id
+  pet_id,
+  open,
+  onChangeOpen
 }: {
   pet_id: string
+  open?: boolean
+  onChangeOpen?: (open: boolean) => void
 }){
-  let [pet, setPet] = useState();
+  const [pet, setPet] = useState<z.infer<typeof PetResponseData> | undefined>(undefined);
+  const [careItemList, setCareItemList] = useState<z.infer<typeof PetCareItemResponseData>[]>([]);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  let revalidator = useRevalidator();
+  
+  function fetchCareItemList() {
+    pets.getPetCareItems(pet_id).then(res => {
+      setCareItemList(res.data);
+    })
+  }
+
+  function fetchPet() {
+    pets.getPet(pet_id).then(res => {
+      setPet(res.data);
+    });
+  }
+  
+  useEffect(() => {
+    fetchCareItemList();
+    fetchPet();
+  }, [pet_id]);
+
 
   
   return (
-    <div className="flex flex-col gap-4">
-      <PetDetailCard pet_id={pet_id}/>
+    <DrawerPage
+      open={open}
+      onOpenChange={(open) => {
+        if(onChangeOpen) onChangeOpen(open);
+      }}
+      title={pet?.name}
+      action={(
+        <>
+          <Button variant="secondary" size="icon-sm" onClick={() => setUpdateOpen(true)}>
+            <Pencil />
+          </Button>
+          <PetUpdateSidePage pet_id={pet_id} 
+                              open={updateOpen}
+                              onChangeOpen={setUpdateOpen}
+                              onSave={() => {
+                                revalidator.revalidate();
+                                fetchPet();
+                                setUpdateOpen(false);
+                              }} 
+          />
+        </>
+      )}
+    >
 
-      <div className="flex flex-col gap-1">
-        <SectionTitle
-          aside={
-            <DrawerPage
-              trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
-              title="돌봄 항목 추가"
-              description="새로운 돌봄 항목을 추가합니다."
-            >
-              <NewPetDrwaer pet_id={pet_id} />
-            </DrawerPage>
-          }
-        >
-          돌봄 항목
-        </SectionTitle>
+      <div className="flex flex-col gap-4">
+        {pet && (
+          <PetDetailCard pet={pet}/>
+        )}
 
-        <PetCareItemList
-          pet_id={pet_id}
-        />
+        <div className="flex flex-col gap-1">
+          <SectionTitle
+            aside={
+              <DrawerPage
+                trigger={<Button size={"xs"} variant={"ghost"}>추가</Button>}
+                title="돌봄 항목 추가"
+                description="새로운 돌봄 항목을 추가합니다."
+                onOpenChange={open=>{
+                  if(!open){
+                    revalidator.revalidate();
+                    fetchCareItemList();
+                  }
+                }}
+              >
+                <NewPetDrawer pet_id={pet_id} />
+              </DrawerPage>
+            }
+          >
+            돌봄 항목
+          </SectionTitle>
+
+          <PetCareItemList
+            pet_care_list={careItemList.map(item=>({
+              id: item.id,
+              emoji: item.emoji,
+              name: item.name,
+              cycle_type: item.cycle_type,
+              interval: item.cycle?.interval,
+              interval_type: item.cycle?.interval_type,
+            }))}
+          />
+        </div>
+
+
       </div>
-
-
-    </div>
+    </DrawerPage>
   );
 }
 
-function NewPetDrwaer({
+function NewPetDrawer({
   pet_id
 }: {
   pet_id: string
@@ -101,7 +170,3 @@ function NewPetDrwaer({
   )
 }
 
-function weekdayNumberToString(weekday: number): ("Friday" | "Monday" | "Saturday" | "Sunday" | "Thursday" | "Tuesday" | "Wednesday") {
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  return weekdays[weekday] as ("Friday" | "Monday" | "Saturday" | "Sunday" | "Thursday" | "Tuesday" | "Wednesday");
-}

@@ -8,7 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { toast } from "~/components/ui/toast";
 import { cn } from "~/lib/utils";
-import login from "~/services/login";
+import login from "~/lib/api/login";
 
 export default function Login() {
 

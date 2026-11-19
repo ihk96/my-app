@@ -1,4 +1,4 @@
-import users from "~/services/users";
+import users from "~/lib/api/users";
 import type { Route } from "./+types/home";
 import { Link, redirect, replace } from "react-router";
 

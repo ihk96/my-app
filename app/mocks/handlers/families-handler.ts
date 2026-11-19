@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { http, HttpResponse } from "msw";
 import type { z } from "zod/v4";
-import { CreateFamilyRequestData, FamiliesResponseData, FamilyJoinRequestsResponseData, FamilyMembersResponseData, UpdateFamilyRequestData } from "~/services/families";
+import { CreateFamilyRequestData, FamiliesResponseData, FamilyJoinRequestsResponseData, FamilyMembersResponseData, UpdateFamilyRequestData } from "~/lib/api/families";
 
 export const familiesHandler = [
   // "/api/families/my" 계열은 "/api/families/:familyId"보다 먼저 와야 매칭이 안 가로채짐

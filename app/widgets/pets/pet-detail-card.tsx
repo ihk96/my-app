@@ -1,11 +1,8 @@
 import { z } from "zod/v4";
 import { dateYearMonthGap } from "~/lib/date-utils";
 import { useEffect, useState } from "react";
-import pets from "~/services/pets";
-import { ChevronRight, Pencil } from "lucide-react";
-import { DrawerPage } from "~/components/ui/drawer-page";
-import { Button } from "~/components/ui/button";
-import PetDetailSidePage from "../sides/pet-detail-side";
+import pets from "~/lib/api/pets";
+import { ChevronRight } from "lucide-react";
 
 const PetDetailSchema = z.object({
     id: z.string(),
@@ -19,34 +16,21 @@ const PetDetailSchema = z.object({
 export type PetDetail = z.infer<typeof PetDetailSchema>;
 
 export function PetDetailCard({
-  pet_id,
+  pet,
   onClick,
 }: {
-  pet_id: string
+  pet: PetDetail
   onClick?: () => void;
 }) {
-  const [pet, setPet] = useState<PetDetail | undefined>(undefined);
   const [additionalInfos, setAdditionalInfos] = useState<string[]>([]);
 
   useEffect(() => {
-    pets.getPet(pet_id).then((res) => {
-      const data = res.data;
-      setPet({
-        id: data.id,
-        name: data.name,
-        species: data.species,
-        birth_date: data.birth_date,
-        day_became_family: data.day_became_family,
-        sex: data.sex,
-        thumbnail: data.thumbnail,
-      });
-    });
-    pets.getPetAdditionalInfo(pet_id).then((res) => {
+    pets.getPetAdditionalInfo(pet.id).then((res) => {
       let data = res.data;
       data.sort((a, b) => a.order_num - b.order_num);
       setAdditionalInfos(data.map(item => item.info));
     });
-  }, [pet_id]);
+  }, [pet]);
 
   return (
     <>

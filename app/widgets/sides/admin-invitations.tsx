@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import admin, { AdminInvitationResponseData } from "~/services/admin";
+import admin, { AdminInvitationResponseData } from "~/lib/api/admin";
 import z from "zod/v4";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";

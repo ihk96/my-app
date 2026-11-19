@@ -6,8 +6,8 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "~/com
 import { useEffect, useState } from "react";
 import { Input } from "~/components/ui/input";
 import type { Route } from "./+types/newFamily";
-import users from "~/services/users";
-import families, { FamilyJoinRequestsResponseData } from "~/services/families";
+import users from "~/lib/api/users";
+import families, { FamilyJoinRequestsResponseData } from "~/lib/api/families";
 import type { z } from "zod/v4";
 import type { AxiosError } from "axios";
 import { Checkbox } from "~/components/ui/checkbox";

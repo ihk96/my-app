@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod/v4";
 import { addDays, addHours } from "~/lib/date-utils";
-import { PetAdditionalInfoResponseData, PetCareItemResponseData, PetResponseData, TodayPetCareItemResponseData } from "~/services/pets";
+import { CreatePetCareItemRequestData, CreatePetCareLogRequestData, CreatePetRequestData, PetAdditionalInfoInputData, PetAdditionalInfoResponseData, PetCareItemResponseData, PetCareItemSummaryResponseData, PetCareItemWriteResponseData, PetCareLogResponseData, PetResponseData, TodayPetCareItemResponseData, UpdatePetCareItemRequestData, UpdatePetRequestData } from "~/lib/api/pets";
 
 let DOBONG_ID = uuidv4().toString();
 let KOMI_ID = uuidv4().toString();
@@ -15,7 +15,6 @@ let MY_PETS: z.infer<typeof PetResponseData>[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     day_became_family: "2025-04-24",
-    deleted_at: null,
     is_deleted: false,
     name: "도봉이",
     species: "Lizard",
@@ -30,7 +29,6 @@ let MY_PETS: z.infer<typeof PetResponseData>[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     day_became_family: "2025-11-24",
-    deleted_at: null,
     is_deleted: false,
     name: "꼬미",
     species: "Lizard",
@@ -51,8 +49,6 @@ let DOBONG_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
       interval: 2,
       interval_type: "AfterDays",
       start_date: "2025-04-24",
-      monthdays: null,
-      weekdays: null,
     },
     creator_id: uuidv4().toString(),
     target_pet_name: "도봉이",
@@ -60,7 +56,6 @@ let DOBONG_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     name: "밥주기",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: DOBONG_ID,
   },
@@ -70,14 +65,12 @@ let DOBONG_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     created_at: new Date().toISOString(),
     cycle_type: "Anytime",
     is_deleted: false,
-    cycle: null,
     creator_id: uuidv4().toString(),
     target_pet_name: "도봉이",
     name: "청소",
     emoji: "🧹",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: DOBONG_ID,
   },
@@ -87,14 +80,12 @@ let DOBONG_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     created_at: new Date().toISOString(),
     cycle_type: "Anytime",
     is_deleted: false,
-    cycle: null,
     creator_id: uuidv4().toString(),
     target_pet_name: "도봉이",
     emoji: "💦",
     name: "분무",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: DOBONG_ID,
   },
@@ -111,8 +102,6 @@ let KOMI_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
       interval: 3,
       interval_type: "AfterDays",
       start_date: "2025-04-24",
-      monthdays: null,
-      weekdays: null,
     },
     creator_id: uuidv4().toString(),
     target_pet_name: "꼬미",
@@ -120,7 +109,6 @@ let KOMI_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     emoji: "🦗",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: KOMI_ID,
   },
@@ -130,14 +118,12 @@ let KOMI_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     created_at: new Date().toISOString(),
     cycle_type: "Anytime",
     is_deleted: false,
-    cycle: null,
     creator_id: uuidv4().toString(),
     target_pet_name: "꼬미",
     name: "청소",
     emoji: "🧹",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: KOMI_ID,
   },
@@ -148,13 +134,11 @@ let KOMI_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
     cycle_type: "Anytime",
     is_deleted: false,
     emoji: "💦",
-    cycle: null,
     creator_id: uuidv4().toString(),
     target_pet_name: "꼬미",
     name: "분무",
     family_id: "family-id",
     creator_name: "김인혁",
-    deleted_at: null,
     updated_at: new Date().toISOString(),
     target_pet_id: KOMI_ID,
   },
@@ -162,17 +146,33 @@ let KOMI_CARE_ITEMS: z.infer<typeof PetCareItemResponseData>[] = [
 
 export const petsHandler = [
   http.get("/api/families/:familyId/pets", ({ params }) => { 
-    let familyId = params.familyId as string;
+    const familyId = params.familyId as string;
 
-    let pets: z.infer<typeof PetResponseData>[] = MY_PETS.map(p=>({...p, family_id: familyId}));
+    const pets: z.infer<typeof PetResponseData>[] = MY_PETS.map(p=>({...p, family_id: familyId}));
 
     return HttpResponse.json(pets);
   }),
-  http.post("/api/families/:familyId/pets", () => { }),
-  http.get("/api/pets/:petId", ({ params }) => { 
-    let petId = params.petId as string;
+  http.post("/api/families/:familyId/pets", async ({params, request}) => { 
+    const familyId = params.familyId as string;
+    const body = await request.json() as z.infer<typeof CreatePetRequestData>;
 
-    let pet: z.infer<typeof PetResponseData> | undefined = MY_PETS.find(p => p.id === petId);
+    const newPet: z.infer<typeof PetResponseData> = {
+      ...body,
+      id: uuidv4().toString(),
+      family_id: familyId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      is_deleted: false,
+    };
+
+    MY_PETS.push(newPet);
+
+    return HttpResponse.json(newPet);
+  }),
+  http.get("/api/pets/:petId", ({ params }) => { 
+    const petId = params.petId as string;
+
+    const pet: z.infer<typeof PetResponseData> | undefined = MY_PETS.find(p => p.id === petId);
 
     if(!pet) {
       return HttpResponse.json({ error: "Pet not found" }, { status: 404 });
@@ -181,12 +181,27 @@ export const petsHandler = [
     return HttpResponse.json(pet);
 
   }),
-  http.put("/api/pets/:petId", () => { }),
+  http.put("/api/pets/:petId", async ( {params, request}) => { 
+    const petId = params.petId as string;
+    const body = await request.json() as z.infer<typeof UpdatePetRequestData>;
+
+    const petIndex = MY_PETS.findIndex(p => p.id === petId);
+    if(petIndex === -1) {
+      return HttpResponse.json({ error: "Pet not found" }, { status: 404 });
+    }
+
+    MY_PETS[petIndex] = {
+      ...MY_PETS[petIndex],
+      ...body,
+    };
+
+    return HttpResponse.json(MY_PETS[petIndex]);
+  }),
   http.delete("/api/pets/:petId", () => { }),
   http.get("/api/pets/:petId/additional-info", ({ params }) => { 
-    let petId = params.petId as string;
+    const petId = params.petId as string;
 
-    let pet: z.infer<typeof PetResponseData> | undefined = MY_PETS.find(p => p.id === petId);
+    const pet: z.infer<typeof PetResponseData> | undefined = MY_PETS.find(p => p.id === petId);
 
     if(!pet) {
       return HttpResponse.json({ error: "Pet not found" }, { status: 404 });
@@ -209,24 +224,175 @@ export const petsHandler = [
 
     return HttpResponse.json(additionalInfoList);
   }),
-  http.put("/api/pets/:petId/additional-info", () => { }),
-  http.get("/api/pets/:petId/care/items", ({ params }) => { 
-    let petId = params.petId as string;
+  http.put("/api/pets/:petId/additional-info", async ({params, request}) => { 
+    const petId = params.petId as string;
+    const body = await request.json() as z.infer<typeof PetAdditionalInfoInputData>[];
 
-    let careItems: z.infer<typeof PetCareItemResponseData>[] = petId == KOMI_ID ? KOMI_CARE_ITEMS : DOBONG_CARE_ITEMS;
+    const petIndex = MY_PETS.findIndex(p => p.id === petId);
+    if(petIndex === -1) {
+      return HttpResponse.json({ error: "Pet not found" }, { status: 404 });
+    }
+
+    const additionalInfoList: z.infer<typeof PetAdditionalInfoResponseData>[] = body.map((info, index) => ({
+      id: uuidv4().toString(),
+      pet_id: petId,
+      info: info.info,
+      order_num: index,
+    }));
+
+    return HttpResponse.json(additionalInfoList);
+
+  }),
+  http.get("/api/pets/:petId/care/items", ({ params }) => { 
+    const petId = params.petId as string;
+
+    const careItems: z.infer<typeof PetCareItemResponseData>[] = petId == KOMI_ID ? KOMI_CARE_ITEMS : DOBONG_CARE_ITEMS;
 
     return HttpResponse.json(careItems);
   }),
 
-  http.post("/api/pets/:petId/care/items", () => { }),
-  http.get("/api/pets/care/items/:itemId", () => { }),
-  http.put("/api/pets/care/items/:itemId", () => { }),
-  http.get("/api/pets/care/items/:itemId/summary", () => { }),
-  http.post("/api/pets/care/items/:itemId/logs", () => { }),
+  http.post("/api/pets/:petId/care/items", async ( { params, request } ) => { 
+    const petId = params.petId as string;
+    const pet = MY_PETS.find(p => p.id === petId);
+    if(!pet) {
+      return HttpResponse.json({ error: "Pet not found" }, { status: 404 });
+    }
+    const body = await request.json() as z.infer<typeof CreatePetCareItemRequestData>;
+
+    const careItem: z.infer<typeof PetCareItemWriteResponseData> = {
+      family_name: "우리집",
+      id: uuidv4().toString(),
+      created_at: new Date().toISOString(),
+      cycle_type: body.cycle_type,
+      is_deleted: false,
+      creator_id: "creator-id",
+      target_pet_name: pet.name,
+      emoji: body.emoji,
+      name: body.name,
+      family_id: pet.family_id,
+      interval_type: body.interval_type,
+      creator_name: "Creator Name",
+      start_date: body.start_date,
+      interval: body.interval,
+      updated_at: new Date().toISOString(),
+      target_pet_id: petId,
+    };
+
+    if(petId == DOBONG_ID) {
+      DOBONG_CARE_ITEMS.push(careItem);
+    }
+    if(petId == KOMI_ID) {
+      KOMI_CARE_ITEMS.push(careItem);
+    }
+
+    return HttpResponse.json(careItem);
+  }),
+  http.get("/api/pets/care/items/:itemId", ({params}) => { 
+    const itemId = params.itemId as string;
+
+    const careItem = [...KOMI_CARE_ITEMS, ...DOBONG_CARE_ITEMS].find(item => item.id === itemId);
+    if(!careItem) {
+      return HttpResponse.json({ error: "Care item not found" }, { status: 404 });
+    }
+
+    return HttpResponse.json(careItem);
+  }),
+  http.put("/api/pets/care/items/:itemId", async ({params, request}) => { 
+    const itemId = params.itemId as string;
+    const body = await request.json() as z.infer<typeof UpdatePetCareItemRequestData>;
+    
+    const careItemIndex = [...KOMI_CARE_ITEMS, ...DOBONG_CARE_ITEMS].findIndex(item => item.id === itemId);
+    if(careItemIndex === -1) {
+      return HttpResponse.json({ error: "Care item not found" }, { status: 404 });
+    }
+
+    const careItem = [...KOMI_CARE_ITEMS, ...DOBONG_CARE_ITEMS][careItemIndex];
+    if(careItem.target_pet_id === DOBONG_ID) {
+      DOBONG_CARE_ITEMS[careItemIndex] = {
+        ...DOBONG_CARE_ITEMS[careItemIndex],
+        ...body
+      };
+    }
+    if(careItem.target_pet_id === KOMI_ID) {
+      KOMI_CARE_ITEMS[careItemIndex] = {
+        ...KOMI_CARE_ITEMS[careItemIndex],
+        ...body
+      };
+    }
+
+    const res: z.infer<typeof PetCareItemWriteResponseData> = {
+      ...careItem,
+      ...body
+    }
+    return HttpResponse.json(res);
+
+  }),
+  http.get("/api/pets/care/items/:itemId/summary", ({params}) => { 
+    const itemId = params.itemId as string;
+
+    const summary: z.infer<typeof PetCareItemSummaryResponseData> = {
+      pet_care_item_id: itemId,
+      name: "밥주기",
+      last_care_log: {
+        log_id: uuidv4().toString(),
+        performed_at: "2026-11-18T20:00:12",
+      },
+      next_care_date: "2026-11-20",
+      this_month_logs_count: 5,
+    }
+
+    return HttpResponse.json(summary);
+  }),
+  http.post("/api/pets/care/items/:itemId/logs", async ({params, request}) => { 
+    const itemId = params.itemId as string;
+    const body = await request.json() as z.infer<typeof CreatePetCareLogRequestData>;
+
+    const newLog: z.infer<typeof PetCareLogResponseData> = {
+      id: uuidv4().toString(),
+      pet_care_item_id: itemId,
+      pet_care_item_name: "밥주기",
+      pet_care_item_emoji: "🦗",
+      target_pet_id: KOMI_ID,
+      target_pet_name: "꼬미",
+      performed_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      memo: body.memo,
+      creator_id: "creator-id",
+      creator_name: "Creator Name",
+    };
+
+    return HttpResponse.json(newLog);
+  }),
   http.delete("/api/pets/care/items/:itemId", () => { }),
   http.delete("/api/pets/care/logs/:logId", () => { }),
-  http.get("/api/pets/care/logs/:logId", () => { }),
-  http.get("/api/pets/care/items/:itemId/logs", () => { }),
+  http.get("/api/pets/care/logs/:logId", () => { 
+    
+  }),
+  http.get("/api/pets/care/items/:itemId/logs", ({params, request}) => { 
+    const itemId = params.itemId as string;
+    const searchParams = new URL(request.url).searchParams;
+
+    
+    const logList: z.infer<typeof PetCareLogResponseData>[] = [
+      {
+        id: uuidv4().toString(),
+        pet_care_item_id: itemId,
+        pet_care_item_name: "밥주기",
+        pet_care_item_emoji: "🦗",
+        target_pet_id: KOMI_ID,
+        target_pet_name: "꼬미",
+        performed_at: "2026-11-18T20:00:12",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        memo: "3 숟갈",
+        creator_id: "creator-id",
+        creator_name: "Creator Name",
+      }
+    ]
+
+    return HttpResponse.json(logList);
+  }),
   http.get("/api/pets/:petId/care/logs", () => { }),
   http.get("/api/families/:familyId/care/items/today", ({ params }) => { 
     let familyId = params.familyId as string;

@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
-import { APIClient } from "./api-client";
 import type { AxiosResponse } from "axios";
+import { APIClient } from "./api-client";
 
 export default {
   getInvitations: async function(){

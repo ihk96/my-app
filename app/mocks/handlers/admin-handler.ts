@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod/v4";
-import { AdminCreateInvitationRequestData, AdminInvitationResponseData } from "~/services/admin";
+import { AdminCreateInvitationRequestData, AdminInvitationResponseData } from "~/lib/api/admin";
 
 export const adminHandler = [
   http.get("/api/admin/users/invitations", () => {

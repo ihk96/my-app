@@ -118,7 +118,7 @@ export const PetResponseData = z.object({
 	created_at: z.iso.datetime(),
 	updated_at: z.iso.datetime(),
 	is_deleted: z.boolean(),
-	deleted_at: z.iso.datetime().nullable(),
+	deleted_at: z.iso.datetime().optional(),
 });
 
 export const CreatePetRequestData = z.object({
@@ -137,6 +137,7 @@ export const UpdatePetRequestData = z.object({
 	birth_date: z.iso.date(),
 	day_became_family: z.iso.date(),
 	sex: z.enum(["Male", "Female", "Unknown"]),
+  original_image: z.string(),
 	thumbnail: z.string(),
 });
 
@@ -156,19 +157,19 @@ export const PetCareItemCycleData = z.object({
 	interval: z.number().int(),
 	interval_type: z.enum(["AfterDays", "Weeks", "Months"]),
 	start_date: z.iso.date(),
-	weekdays: z.array(z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])).nullable(),
-	monthdays: z.array(z.number().int()).nullable(),
+	weekdays: z.array(z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])).optional(),
+	monthdays: z.array(z.number().int()).optional(),
 });
 
 export const CreatePetCareItemRequestData = z.object({
 	name: z.string(),
   emoji: z.string(),
 	cycle_type: z.enum(["Anytime", "Regular"]),
-	weekdays: z.array(z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])).nullable().optional(),
-	monthdays: z.array(z.number().int()).nullable().optional(),
-	start_date: z.iso.date().nullable().optional(),
-	interval_type: z.enum(["AfterDays", "Weeks", "Months"]).nullable().optional(),
-	interval: z.number().int().nullable().optional(),
+	weekdays: z.array(z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])).optional(),
+	monthdays: z.array(z.number().int()).optional(),
+	start_date: z.iso.date().optional(),
+	interval_type: z.enum(["AfterDays", "Weeks", "Months"]).optional(),
+	interval: z.number().int().optional(),
 });
 
 export const UpdatePetCareItemRequestData = CreatePetCareItemRequestData;
@@ -179,14 +180,14 @@ export const PetCareItemResponseData = z.object({
 	created_at: z.iso.datetime(),
 	cycle_type: z.enum(["Anytime", "Regular"]),
 	is_deleted: z.boolean(),
-	cycle: PetCareItemCycleData.nullable(),
+	cycle: PetCareItemCycleData.optional(),
 	creator_id: z.string(),
 	target_pet_name: z.string(),
   emoji: z.string(),
 	name: z.string(),
 	family_id: z.string(),
 	creator_name: z.string(),
-	deleted_at: z.iso.datetime().nullable(),
+	deleted_at: z.iso.datetime().optional(),
 	updated_at: z.iso.datetime(),
 	target_pet_id: z.string(),
 });
@@ -202,11 +203,11 @@ export const PetCareItemWriteResponseData = z.object({
   emoji: z.string(),
 	name: z.string(),
 	family_id: z.string(),
-	interval_type: z.enum(["AfterDays", "Weeks", "Months"]).nullable(),
+	interval_type: z.enum(["AfterDays", "Weeks", "Months"]).optional(),
 	creator_name: z.string(),
-	start_date: z.iso.date().nullable(),
-	interval: z.number().int().nullable(),
-	deleted_at: z.iso.datetime().nullable(),
+	start_date: z.iso.date().optional(),
+	interval: z.number().int().optional(),
+	deleted_at: z.iso.datetime().optional(),
 	updated_at: z.iso.datetime(),
 	target_pet_id: z.string(),
 });
@@ -239,8 +240,8 @@ export const PetCareItemSummaryResponseData = z.object({
 	last_care_log: z.object({
 		log_id: z.string(),
 		performed_at: z.string(),
-	}).nullable(),
-	next_care_date: z.iso.date().nullable(),
+	}).optional(),
+	next_care_date: z.iso.date().optional(),
 	this_month_logs_count: z.number().int(),
 });
 
