@@ -9,20 +9,20 @@ import {
 } from "~/components/app/screen";
 import { Button } from "~/components/ui/button";
 import { CardContent } from "~/components/ui/card";
-import { DrawerPage } from "~/components/ui/drawer-page";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import PetsItemForm from "~/widgets/pets/pets-item-form";
 import type { Route } from "./+types";
 import { useAppState } from "~/stores/app-state";
-import pets from "~/lib/api/pets";
+import pets, { CreatePetCareLogRequestData, TodayPetCareItemResponseData } from "~/lib/api/pets";
 import { redirect, useRevalidator } from "react-router";
-import { z } from "zod/v4";
 import { PetDetailCard } from "~/widgets/pets/pet-detail-card";
 import { sameDay } from "~/lib/date-utils";
 import { CareItemRowForLog } from "~/widgets/pets/pet-care-item-row";
 import PetDetailSidePage from "~/widgets/sides/pet-detail-side";
 import PetCreateSidePage from "~/widgets/sides/pet-create-side";
+import CareLogDrawer from "~/widgets/pets/care-log-drawer";
+import type { z } from "zod/v4";
+import { toast } from "~/components/ui/toast";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const {family} = useAppState.getState();
@@ -74,6 +74,9 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
   const [open, setOpen] = useState(false);
   const [createSideOpen, setCreateSideOpen] = useState(false);
   const [selectedPetIds, setSelectedPetIds] = useState([petsList[0]?.id]);
+  const [careLogDrawerOpen, setCareLogDrawerOpen] = useState(false);
+  const [selectedCareItem, setSelectedCareItem] = useState<z.infer<typeof TodayPetCareItemResponseData> | undefined>();
+
   const selectedPet = useMemo(() => {
     if(selectedPetIds.length == 0) {
       return undefined;
@@ -109,9 +112,39 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
                                        label: "대기"
                                      },
                                    }} 
+                                   onClick={() => {
+                                     setSelectedCareItem(item);
+                                     setCareLogDrawerOpen(true);
+                                   }}
                 />
               ))}
             </RowGroup>
+            <CareLogDrawer
+              title={`돌봄 기록 · ${selectedCareItem?.name}`}
+              description={selectedCareItem ? careRowDescription(selectedCareItem): ""}
+              open={selectedCareItem != undefined && careLogDrawerOpen }
+              onOpenChange={setCareLogDrawerOpen}
+              onSubmit={(value)=>{
+                const body: z.infer<typeof CreatePetCareLogRequestData> = {
+                  memo: value.memo,
+                  performed_at: value.date+"T"+value.time
+                }
+                if(selectedCareItem) {
+                  toast.promise(new Promise((resolve, reject) => {
+                    pets.createPetCareLog(selectedCareItem.id, body)
+                      .then(resolve)
+                      .catch(reject)
+                      .finally(() => {
+                        revalidator.revalidate();
+                      });
+                  }), {
+                    loading: '돌봄 기록 저장 중...',
+                    success: '돌봄 기록 저장 완료!',
+                    error: '돌봄 기록 저장 실패'
+                  });
+                }
+              }}
+            />
           </CardContent>
         </Panel>
       </div>

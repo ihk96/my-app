@@ -21,10 +21,11 @@ import {
   nextOccurrence,
   type RecurrenceRule,
 } from "../pets/care-item-form";
-import { CareLogDrawer } from "../pets/care-log-form";
 import type { z } from "zod/v4";
-import pets, { PetCareItemResponseData, PetCareItemSummaryResponseData, PetCareLogResponseData } from "~/lib/api/pets";
+import pets, { CreatePetCareLogRequestData, PetCareItemResponseData, PetCareItemSummaryResponseData, PetCareLogResponseData } from "~/lib/api/pets";
 import { convertLocalDateTimeString, sameDay, weekdayStringToNumber } from "~/lib/date-utils";
+import CareLogDrawer from "../pets/care-log-drawer";
+import { toast } from "~/components/ui/toast";
 
 
 /** "오늘 07:20", "어제 20:37", "3일 전" 처럼 사람이 읽는 간격으로 바꾼다. */
@@ -51,7 +52,7 @@ export default function PetPetCareItemDetailSidePage({
 
   useEffect(() => {
     fetchCareLogs();
-    pets.getPetCareItemSummary(pet_care_item.id).then(res => setSummary(res.data));
+    fatchSummary();
   }, [pet_care_item]);
 
   function fetchCareLogs(){
@@ -65,6 +66,10 @@ export default function PetPetCareItemDetailSidePage({
     pets.getPetCareItemLogs(pet_care_item.id, convertLocalDateTimeString(start), convertLocalDateTimeString(end)).then(res => {
       setLogs(res.data.sort((a, b) => b.performed_at.localeCompare(a.performed_at)));
     });
+  }
+
+  function fatchSummary() {
+    pets.getPetCareItemSummary(pet_care_item.id).then(res => setSummary(res.data));
   }
 
   const lastLog = summary?.last_care_log;
@@ -256,6 +261,27 @@ export default function PetPetCareItemDetailSidePage({
           })}
           open={logOpen}
           onOpenChange={setLogOpen}
+          onSubmit={(value)=>{
+                const body: z.infer<typeof CreatePetCareLogRequestData> = {
+                  memo: value.memo,
+                  performed_at: value.date+"T"+value.time
+                }
+                if(pet_care_item) {
+                  toast.promise(new Promise((resolve, reject) => {
+                    pets.createPetCareLog(pet_care_item.id, body)
+                      .then(resolve)
+                      .catch(reject)
+                      .finally(() => {
+                        fetchCareLogs();
+                        fatchSummary();
+                      });
+                  }), {
+                    loading: '돌봄 기록 저장 중...',
+                    success: '돌봄 기록 저장 완료!',
+                    error: '돌봄 기록 저장 실패'
+                  });
+                }
+              }}
         />
       )}
     </div>
