@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod/v4";
 import { addDays, addHours } from "~/lib/date-utils";
-import { CreatePetCareItemRequestData, CreatePetCareLogRequestData, CreatePetRequestData, PetAdditionalInfoInputData, PetAdditionalInfoResponseData, PetCareItemResponseData, PetCareItemSummaryResponseData, PetCareItemWriteResponseData, PetCareLogResponseData, PetResponseData, TodayPetCareItemResponseData, UpdatePetCareItemRequestData, UpdatePetRequestData } from "~/lib/api/pets";
+import { CreatePetCareItemRequestData, CreatePetCareLogRequestData, CreatePetRequestData, PetAdditionalInfoInputData, PetAdditionalInfoResponseData, PetCareItemResponseData, PetCareItemSummaryResponseData, PetCareItemWriteResponseData, PetCareLogResponseData, PetResponseData, TodayPetCareItemResponseData, UpdatePetCareItemRequestData, UpdatePetCareLogRequestData, UpdatePetRequestData } from "~/lib/api/pets";
 
 let DOBONG_ID = uuidv4().toString();
 let KOMI_ID = uuidv4().toString();
@@ -365,7 +365,11 @@ export const petsHandler = [
     return HttpResponse.json(newLog);
   }),
   http.delete("/api/pets/care/items/:itemId", () => { }),
-  http.delete("/api/pets/care/logs/:logId", () => { }),
+  http.delete("/api/pets/care/logs/:logId", ({params}) => { 
+    const logId = params.logId as string;
+
+    return HttpResponse.json({ success: true, logId });
+  }),
   http.get("/api/pets/care/logs/:logId", () => { 
     
   }),
@@ -480,5 +484,25 @@ export const petsHandler = [
 
     return HttpResponse.json(todayCareItems);
   }),
-  http.put("/api/pets/care/logs/:logId", () => { }),
+  http.put("/api/pets/care/logs/:logId", async ({params, request}) => { 
+    const logId = params.logId as string;
+    const body = await request.json() as z.infer<typeof UpdatePetCareLogRequestData>;
+    
+    const updatedLog: z.infer<typeof PetCareLogResponseData> = {
+      id: logId,
+      pet_care_item_id: "pet_care_item_id",
+      pet_care_item_name: "pet_care_item_name",
+      pet_care_item_emoji: "💦",
+      target_pet_id: "target_pet_id",
+      target_pet_name: "target_pet_name",
+      performed_at: body.performed_at,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      memo: body.memo,
+      creator_id: "creator_id",
+      creator_name: "creator_name",
+    };
+
+    return HttpResponse.json(updatedLog);
+  }),
 ];

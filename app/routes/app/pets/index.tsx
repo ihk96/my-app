@@ -132,7 +132,10 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
                 if(selectedCareItem) {
                   toast.promise(new Promise((resolve, reject) => {
                     pets.createPetCareLog(selectedCareItem.id, body)
-                      .then(resolve)
+                      .then(()=>{
+                        resolve(undefined);
+                        setCareLogDrawerOpen(false);
+                      })
                       .catch(reject)
                       .finally(() => {
                         revalidator.revalidate();

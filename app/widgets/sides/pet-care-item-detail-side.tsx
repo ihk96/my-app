@@ -47,6 +47,7 @@ export default function PetPetCareItemDetailSidePage({
   const [summary, setSummary] = useState<z.infer<typeof PetCareItemSummaryResponseData> | undefined>(undefined);
 
   const [logOpen, setLogOpen] = useState(false);
+  const [selectedLog, setSelectedLog] = useState<z.infer<typeof PetCareLogResponseData> | undefined>(undefined);
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [month, setMonth] = useState(new Date());
 
@@ -224,6 +225,10 @@ export default function PetPetCareItemDetailSidePage({
                     {group.logs.map((log) => (
                       <Row
                         key={log.id}
+                        onClick={() => {
+                          setSelectedLog(log)
+                          setLogOpen(true);
+                        }}
                         media={
                           <div className="flex flex-col items-center leading-none">
                             <span className="text-sm font-semibold tabular-nums text-foreground">
@@ -260,7 +265,32 @@ export default function PetPetCareItemDetailSidePage({
             interval_type: pet_care_item.cycle?.interval_type,
           })}
           open={logOpen}
-          onOpenChange={setLogOpen}
+          onOpenChange={(open) => {
+            setLogOpen(open);
+            if(!open) setSelectedLog(undefined);
+          }}
+          onDelete={()=>{
+            if(selectedLog){
+              toast.promise(new Promise((resolve, reject)=>{
+                pets.deletePetCareLog(selectedLog.id)
+                  .then(()=>{
+                    resolve(undefined);
+                    setLogOpen(false);
+                  })
+                  .catch(reject)
+                  .finally(() => {
+                    fetchCareLogs();
+                    fatchSummary();
+                    setSelectedLog(undefined);
+                  });
+              }),{
+                "loading": '돌봄 기록 삭제 중...',
+                "success": '돌봄 기록 삭제 완료!',
+                "error": '돌봄 기록 삭제 실패'
+              }
+            )
+            }
+          }}
           onSubmit={(value)=>{
                 const body: z.infer<typeof CreatePetCareLogRequestData> = {
                   memo: value.memo,
@@ -268,13 +298,30 @@ export default function PetPetCareItemDetailSidePage({
                 }
                 if(pet_care_item) {
                   toast.promise(new Promise((resolve, reject) => {
-                    pets.createPetCareLog(pet_care_item.id, body)
-                      .then(resolve)
-                      .catch(reject)
-                      .finally(() => {
-                        fetchCareLogs();
-                        fatchSummary();
-                      });
+                    if(selectedLog){
+                      pets.updatePetCareLog(selectedLog.id, body)
+                        .then(()=>{
+                          resolve(undefined);
+                          setLogOpen(false);
+                        })
+                        .catch(reject)
+                        .finally(() => {
+                          fetchCareLogs();
+                          fatchSummary();
+                          setSelectedLog(undefined);
+                        });
+                    } else {
+                      pets.createPetCareLog(pet_care_item.id, body)
+                        .then(()=>{
+                          resolve(undefined);
+                          setLogOpen(false);
+                        })
+                        .catch(reject)
+                        .finally(() => {
+                          fetchCareLogs();
+                          fatchSummary();
+                        });
+                    }
                   }), {
                     loading: '돌봄 기록 저장 중...',
                     success: '돌봄 기록 저장 완료!',
@@ -282,6 +329,11 @@ export default function PetPetCareItemDetailSidePage({
                   });
                 }
               }}
+          log={selectedLog ? {
+            date: selectedLog.performed_at.substring(0,10),
+            time: selectedLog.performed_at.substring(11,16),
+            memo: selectedLog.memo
+          } : undefined}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Drawer,
@@ -16,6 +16,8 @@ export type CareLogDrawerProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit?: (value: CareLogFormValue) => void;
+  onDelete?: () => void;
+  log?: CareLogFormValue
 };
 
 /**
@@ -28,15 +30,30 @@ export default function CareLogDrawer({
   open,
   onOpenChange,
   onSubmit,
+  onDelete,
+  log,
 }: CareLogDrawerProps) {
-  const [value, setValue] = useState<CareLogFormValue>(createCareLogFormValue);
+  const [value, setValue] = useState<CareLogFormValue>(log ?? createCareLogFormValue());
+
+  useEffect(() => {
+    if(log){
+      setValue(log);
+    } else {
+      setValue(createCareLogFormValue());
+    }
+  }, [log]);
+
+  useEffect(() => {
+    if (!open) setValue(createCareLogFormValue());
+  }, [open]);
+
+  const isUpdate = log;
 
   return (
     <Drawer
       open={open}
       onOpenChange={(next) => {
         // 닫을 때마다 "지금"으로 되돌려서, 다시 열면 방금 시각이 들어와 있게 한다.
-        if (!next) setValue(createCareLogFormValue());
         onOpenChange(next);
       }}
       showSwipeHandle
@@ -54,14 +71,27 @@ export default function CareLogDrawer({
         </div>
         <DrawerFooter>
           <p>돌봄 기록을 남기시겠습니까?</p>
-          <Button
-            onClick={() => {
-              onSubmit?.(value);
-              onOpenChange(false);
-            }}
-          >
-            기록 남기기
-          </Button>
+          <div className="flex gap-2 w-full justify-between">
+            {isUpdate && onDelete && (
+              <Button
+                className="flex-1"
+                variant="destructive"
+                onClick={() => {
+                  onDelete();
+                }}
+              >
+                기록 삭제
+              </Button>
+            )}
+            <Button
+              className="flex-1"
+              onClick={() => {
+                onSubmit?.(value);
+              }}
+            >
+              {isUpdate ? "기록 수정" : "기록 남기기"}
+            </Button>
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
