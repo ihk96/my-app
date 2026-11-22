@@ -9,6 +9,7 @@ import { dataUrlToFile, fileToDataUrl } from "~/lib/file-utils";
 import { toast } from "~/components/ui/toast";
 import { DrawerPage } from "~/components/ui/drawer-page";
 import { Pencil } from "lucide-react";
+import { format } from "date-fns";
 
 export default function PetUpdateSidePage(
   { 
@@ -61,8 +62,8 @@ export default function PetUpdateSidePage(
         name: value.name,
         species: value.species as z.infer<typeof UpdatePetRequestData>["species"],
         sex: value.gender as z.infer<typeof UpdatePetRequestData>["sex"],
-        day_became_family: value.familyDate.toISOString(),
-        birth_date: value.birthday.toISOString(),
+        day_became_family: format(new Date(value.familyDate.toISOString()), "yyyy-MM-dd"),
+        birth_date: format(new Date(value.birthday.toISOString()), "yyyy-MM-dd"),
         original_image: originImage,
         thumbnail: thumbnailImage,
       };

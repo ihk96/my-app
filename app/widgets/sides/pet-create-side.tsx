@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PetsItemForm, { type PetsItemFormValue } from "../pets/pets-item-form";
 import pets, { CreatePetRequestData, PetResponseData, UpdatePetRequestData } from "~/lib/api/pets";
 import type { z } from "zod/v4";
+import { format } from "date-fns";
 import { Panel } from "~/components/app/screen";
 import { CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
@@ -32,8 +33,8 @@ export default function PetCreateSidePage(
         name: value.name,
         species: value.species as z.infer<typeof UpdatePetRequestData>["species"],
         sex: value.gender as z.infer<typeof UpdatePetRequestData>["sex"],
-        day_became_family: value.familyDate.toISOString(),
-        birth_date: value.birthday.toISOString(),
+        day_became_family: format(new Date(value.familyDate.toISOString()), "yyyy-MM-dd"),
+        birth_date: format(new Date(value.birthday.toISOString()), "yyyy-MM-dd"),
         original_image: originImage,
         thumbnail: thumbnailImage,
       };
