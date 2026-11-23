@@ -129,7 +129,7 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
               onSubmit={(value)=>{
                 const body: z.infer<typeof CreatePetCareLogRequestData> = {
                   memo: value.memo,
-                  performed_at: value.date+"T"+value.time
+                  performed_at: value.date+"T"+value.time+":00"
                 }
                 if(selectedCareItem) {
                   toast.promise(new Promise((resolve, reject) => {

@@ -295,7 +295,7 @@ export default function PetPetCareItemDetailSidePage({
           onSubmit={(value)=>{
                 const body: z.infer<typeof CreatePetCareLogRequestData> = {
                   memo: value.memo,
-                  performed_at: value.date+"T"+value.time
+                  performed_at: value.date+"T"+value.time+":00"
                 }
                 if(pet_care_item) {
                   toast.promise(new Promise((resolve, reject) => {
