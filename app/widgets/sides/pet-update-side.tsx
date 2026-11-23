@@ -8,8 +8,8 @@ import { Button } from "~/components/ui/button";
 import { dataUrlToFile, fileToDataUrl } from "~/lib/file-utils";
 import { toast } from "~/components/ui/toast";
 import { DrawerPage } from "~/components/ui/drawer-page";
-import { Pencil } from "lucide-react";
 import { format } from "date-fns";
+import type { AxiosError } from "axios";
 
 export default function PetUpdateSidePage(
   { 
@@ -29,17 +29,25 @@ export default function PetUpdateSidePage(
   const [value, setValue] = useState<PetsItemFormValue | undefined>(undefined);
   
   useEffect(() => {
-    pets.getPet(pet_id).then(res => {
-      setPet(res.data);
-    });
-  }, [pet_id]);
+    if(open){
+      pets.getPet(pet_id).then(res => {
+        setPet(res.data);
+      }).catch((err: AxiosError) => {
+        toast.add({
+          // @ts-ignore
+          description: err.response?.data?.error ?? "오류가 발생했습니다.",
+          type: "error"
+        })
+      });
+    }
+  }, [pet_id, open]);
 
   useEffect(() => {
     if (pet) {
       pets.getPetAdditionalInfo(pet_id).then(async res => {
         let additionalInfo = res.data;
-        const originImage = pet.original_image ? await dataUrlToFile(pet.original_image, "original") : undefined;
-        const thumbnailImage = pet.thumbnail ? await dataUrlToFile(pet.thumbnail, "thumbnail") : undefined;
+        const originImage = pet.original_image ? await dataUrlToFile(pet.original_image, "original").then(file => file).catch(() => undefined) : undefined;
+        const thumbnailImage = pet.thumbnail ? await dataUrlToFile(pet.thumbnail, "thumbnail").then(file => file).catch(() => undefined) : undefined;
         setValue({
         	name: pet.name,
           species: pet.species,
@@ -50,6 +58,13 @@ export default function PetUpdateSidePage(
           originalImage: originImage,
           thumbnailImage: thumbnailImage,
         });
+      })
+      .catch((err: AxiosError) => {
+        toast.add({
+          // @ts-ignore
+          description: err.response?.data?.error ?? "오류가 발생했습니다.",
+          type: "error"
+        })
       });
     }
   }, [pet]);

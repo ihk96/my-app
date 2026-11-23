@@ -23,6 +23,7 @@ import PetCreateSidePage from "~/widgets/sides/pet-create-side";
 import CareLogDrawer from "~/widgets/pets/care-log-drawer";
 import type { z } from "zod/v4";
 import { toast } from "~/components/ui/toast";
+import { Badge } from "~/components/ui/badge";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const {family} = useAppState.getState();
@@ -105,7 +106,7 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
                                    item={{
                                      id: item.id,
                                      media: item.emoji,
-                                     title: item.name,
+                                     title: <><Badge className="rounded-sm px-1 mr-1" variant="secondary">{item.target_pet_name}</Badge> {item.name} </>,
                                      description: careRowDescription(item),
                                      badge: {
                                        className: "bg-warning-muted text-warning",
@@ -121,6 +122,7 @@ export default function PetsHome({loaderData}:Route.ComponentProps) {
             </RowGroup>
             <CareLogDrawer
               title={`돌봄 기록 · ${selectedCareItem?.name}`}
+              target_pet_name={selectedCareItem?.target_pet_name ?? ""}
               description={selectedCareItem ? careRowDescription(selectedCareItem): ""}
               open={selectedCareItem != undefined && careLogDrawerOpen }
               onOpenChange={setCareLogDrawerOpen}

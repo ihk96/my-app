@@ -15,7 +15,6 @@ import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { CardContent } from "~/components/ui/card";
 import { DrawerPage } from "~/components/ui/drawer-page";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 import { useAppState } from "~/stores/app-state";
 
 const BUDGET = { spent: 1_284_300, total: 1_600_000, daysLeft: 27 };

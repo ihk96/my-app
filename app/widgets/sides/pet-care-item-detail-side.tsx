@@ -102,8 +102,8 @@ export default function PetPetCareItemDetailSidePage({
               {pet_care_item?.emoji}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-heading text-base font-semibold">
-                {pet_care_item?.name}
+              <p className="font-heading text-base font-semibold flex items-center">
+                <Badge className="rounded-sm px-1 mr-1" variant="secondary">{pet_care_item?.target_pet_name}</Badge> {pet_care_item?.name}
               </p>
               <p className="mt-0.5 truncate text-xs text-muted-foreground">
                 {pet_care_item?.cycle
@@ -258,6 +258,7 @@ export default function PetPetCareItemDetailSidePage({
       { pet_care_item && (
         <CareLogDrawer
           title={`돌봄 기록 · ${pet_care_item?.name}`}
+          target_pet_name={pet_care_item?.target_pet_name ?? ""}
           description={careRowDescription({
             cycle_type: pet_care_item.cycle_type,
             last_care_at: lastLog?.performed_at,

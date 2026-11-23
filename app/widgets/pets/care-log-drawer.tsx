@@ -9,9 +9,11 @@ import {
   DrawerTitle,
 } from "~/components/ui/drawer";
 import CareLogForm, { createCareLogFormValue, type CareLogFormValue } from "./care-log-form";
+import { Badge } from "~/components/ui/badge";
 
 export type CareLogDrawerProps = {
   title: React.ReactNode;
+  target_pet_name: string;
   description?: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -26,6 +28,7 @@ export type CareLogDrawerProps = {
  */
 export default function CareLogDrawer({
   title,
+  target_pet_name,
   description,
   open,
   onOpenChange,
@@ -67,6 +70,7 @@ export default function CareLogDrawer({
           ) : null}
         </DrawerHeader>
         <div className="scroll-fade flex-1 overflow-y-auto p-4">
+          <p className="mb-3">대상: <Badge variant="secondary" className="rounded-sm text-sm">{target_pet_name}</Badge></p>
           <CareLogForm value={value} onChange={setValue} />
         </div>
         <DrawerFooter>

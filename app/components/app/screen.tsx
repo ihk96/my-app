@@ -85,6 +85,16 @@ function RowGroup({ className, ...props }: React.ComponentProps<"div">) {
   return <div className={cn("divide-y divide-border", className)} {...props} />;
 }
 
+type RowProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "title"
+> & {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  media?: React.ReactNode;
+  trailing?: React.ReactNode;
+};
+
 /** 리스트 한 줄. media는 이모지(품목·반려동물)나 lucide 아이콘 모두 받는다. */
 function Row({
   media,
@@ -92,12 +102,7 @@ function Row({
   description,
   trailing,
   ...props
-}: {
-  media?: React.ReactNode;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  trailing?: React.ReactNode;
-} & React.ComponentProps<"div">) {
+}: RowProps) {
   return (
     <div className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0" {...props}>
       {media ? (

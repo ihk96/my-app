@@ -8,9 +8,9 @@ export function CareItemRowForLog({
 }:{ 
   item: {
     id: string;
-    media: string;
-    title: string;
-    description: string;
+    media: React.ReactNode;
+    title: React.ReactNode;
+    description: React.ReactNode;
     badge: {
       className: string;
       label: string;
