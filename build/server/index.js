@@ -523,7 +523,7 @@ var server_manifest_default = {
 			"hasClientMiddleware": false,
 			"hasDefaultExport": true,
 			"hasErrorBoundary": false,
-			"module": "/assets/index-main-BGUB3tzq.js",
+			"module": "/assets/index-main-BqFavkEG.js",
 			"imports": [
 				"/assets/utils-D8DF_fE-.js",
 				"/assets/react-dom-MyUVqu9L.js",
@@ -726,8 +726,8 @@ var server_manifest_default = {
 			"hydrateFallbackModule": void 0
 		}
 	},
-	"url": "/assets/manifest-d9de0b25.js",
-	"version": "d9de0b25",
+	"url": "/assets/manifest-dbd271f2.js",
+	"version": "dbd271f2",
 	"sri": void 0
 };
 //#endregion
