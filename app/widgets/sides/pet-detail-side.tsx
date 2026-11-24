@@ -14,6 +14,7 @@ import { useRevalidator } from "react-router";
 import { weekdayNumberToString } from "~/lib/date-utils";
 import PetUpdateSidePage from "./pet-update-side";
 import { Pencil } from "lucide-react";
+import type { AxiosError } from "axios";
 
 export default function PetDetailSidePage({
   pet_id,
@@ -30,14 +31,30 @@ export default function PetDetailSidePage({
   let revalidator = useRevalidator();
   
   function fetchCareItemList() {
-    pets.getPetCareItems(pet_id).then(res => {
+    pets.getPetCareItems(pet_id)
+    .then(res => {
       setCareItemList(res.data);
     })
+    .catch((err: AxiosError) => {
+      toast.add({
+        // @ts-ignore
+        description: err.response?.data?.message ?? "오류가 발생했습니다.",
+        type: "error"
+      });
+    });
   }
 
   function fetchPet() {
-    pets.getPet(pet_id).then(res => {
+    pets.getPet(pet_id)
+    .then(res => {
       setPet(res.data);
+    })
+    .catch((err: AxiosError) => {
+      toast.add({
+        // @ts-ignore
+        description: err.response?.data?.message ?? "오류가 발생했습니다.",
+        type: "error"
+      });
     });
   }
   

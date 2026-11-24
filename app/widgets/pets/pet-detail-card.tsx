@@ -3,6 +3,8 @@ import { dateYearMonthGap } from "~/lib/date-utils";
 import { useEffect, useState } from "react";
 import pets from "~/lib/api/pets";
 import { ChevronRight } from "lucide-react";
+import { toast } from "~/components/ui/toast";
+import type { AxiosError } from "axios";
 
 const PetDetailSchema = z.object({
     id: z.string(),
@@ -25,10 +27,18 @@ export function PetDetailCard({
   const [additionalInfos, setAdditionalInfos] = useState<string[]>([]);
 
   useEffect(() => {
-    pets.getPetAdditionalInfo(pet.id).then((res) => {
+    pets.getPetAdditionalInfo(pet.id)
+    .then((res) => {
       let data = res.data;
       data.sort((a, b) => a.order_num - b.order_num);
       setAdditionalInfos(data.map(item => item.info));
+    })
+    .catch((err: AxiosError) => {
+      toast.add({
+        // @ts-ignore
+        description: err.response?.data?.message ?? "오류가 발생했습니다.",
+        type: "error"
+      });
     });
   }, [pet]);
 
